@@ -20,11 +20,11 @@
 
 		<!-- Define the version of the JBoss BOMs we want to import to specify 
 			tested stacks. -->
-		<version.jboss.bom>8.2.1.Final</version.jboss.bom>
+		<version.jboss.bom>6.4.0.GA</version.jboss.bom>
 
 		<!-- other plugin versions -->
 		<version.compiler.plugin>3.1</version.compiler.plugin>
-		<version.surefire.plugin>2.16</version.surefire.plugin>
+		<version.surefire.plugin>2.10</version.surefire.plugin>
 		<version.war.plugin>2.5</version.war.plugin>
 
 		<!-- maven-compiler-plugin -->
@@ -36,18 +36,25 @@
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
-				<groupId>org.wildfly.bom</groupId>
-				<artifactId>jboss-javaee-7.0-with-tools</artifactId>
+				<groupId>org.jboss.bom.eap</groupId>
+				<artifactId>jboss-javaee-6.0-with-tools</artifactId>
 				<version>${version.jboss.bom}</version>
 				<type>pom</type>
-				<scope>import</scope>
+                <scope>import</scope>
 			</dependency>
 			<dependency>
-				<groupId>org.wildfly.bom</groupId>
-				<artifactId>jboss-javaee-7.0-with-hibernate</artifactId>
+				<groupId>org.jboss.bom.eap</groupId>
+				<artifactId>jboss-javaee-6.0-with-hibernate</artifactId>
 				<version>${version.jboss.bom}</version>
 				<type>pom</type>
-				<scope>import</scope>
+                <scope>import</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.jboss.bom.eap</groupId>
+				<artifactId>jboss-javaee-6.0-with-resteasy</artifactId>
+				<version>${version.jboss.bom}</version>
+				<type>pom</type>
+                <scope>import</scope>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
@@ -59,7 +66,7 @@
 			as the API is included in JBoss WildFly -->
 		<dependency>
 			<groupId>org.jboss.spec.javax.annotation</groupId>
-			<artifactId>jboss-annotations-api_1.2_spec</artifactId>
+			<artifactId>jboss-annotations-api_1.1_spec</artifactId>
 			<scope>provided</scope>
 		</dependency>
 
@@ -67,7 +74,7 @@
 			in JBoss WildFly -->
 		<dependency>
 			<groupId>org.jboss.resteasy</groupId>
-			<artifactId>jaxrs-api</artifactId>
+			<artifactId>resteasy-jaxrs</artifactId>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>

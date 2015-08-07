@@ -38,6 +38,8 @@ import org.codehaus.jettison.json.JSONObject;
 public class RestClient
 {
 
+	private static final String DOMAIN = ".cloudapps.osecloud.com";
+	
 	private enum Service
 	{
 		Product, Sales, Billing
@@ -542,18 +544,18 @@ public class RestClient
 		switch( service )
 		{
 			case Product:
-				uriBuilder.setHost( "product-service" );
-				stringWriter.append( "/product" );
+				uriBuilder.setHost( "product" + DOMAIN );
+				//stringWriter.append( "/product" );
 				break;
 
 			case Sales:
-				uriBuilder.setHost( "sales-service" );
-				stringWriter.append( "/sales" );
+				uriBuilder.setHost( "sales" + DOMAIN );
+				//stringWriter.append( "/sales" );
 				break;
 
 			case Billing:
-				uriBuilder.setHost( "billing-service" );
-				stringWriter.append( "/billing" );
+				uriBuilder.setHost( "billing" + DOMAIN );
+				//stringWriter.append( "/billing" );
 				break;
 
 			default:

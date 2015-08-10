@@ -314,7 +314,7 @@
 		</profile>
 
 		<!-- Activate JBoss Product Maven repository -->
-		<profile>
+		<!-- profile>
 			<id>jboss-product-repository</id>
 			<activation>
 				<property>
@@ -327,7 +327,7 @@
 					<url>http://maven.repository.redhat.com/techpreview/all/</url>
 				</repository>
 			</repositories>
-		</profile>
+		</profile-->
 
 	</profiles>
 </project>

@@ -1,7 +1,6 @@
 package com.redhat.refarch.microservices.presentation;
 
 import java.io.IOException;
-import java.io.StringWriter;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -37,14 +36,6 @@ import org.codehaus.jettison.json.JSONObject;
 
 public class RestClient
 {
-
-	private static final String DOMAIN = ".cloudapps.osecloud.com";
-	
-	private enum Service
-	{
-		Product, Sales, Billing
-	};
-
 	public static void setProductsAttribute(HttpServletRequest request)
 	{
 		try
@@ -71,7 +62,7 @@ public class RestClient
 	private static List<Map<String, Object>> searchProducts(String query) throws IOException, JSONException, URISyntaxException, HttpErrorException
 	{
 		HttpClient client = new DefaultHttpClient();
-		URIBuilder uriBuilder = getUriBuilder( Service.Product, "products" );
+		URIBuilder uriBuilder = ServiceProvider.getUriBuilder( ServiceProvider.Service.Product, "products" );
 		for( String keyword : query.split( "\\s+" ) )
 		{
 			uriBuilder.addParameter( "keyword", keyword );
@@ -95,7 +86,7 @@ public class RestClient
 	private static List<Map<String, Object>> getFeaturedProducts() throws IOException, JSONException, URISyntaxException, HttpErrorException
 	{
 		HttpClient client = new DefaultHttpClient();
-		URIBuilder uriBuilder = getUriBuilder( Service.Product, "products" );
+		URIBuilder uriBuilder = ServiceProvider.getUriBuilder( ServiceProvider.Service.Product, "products" );
 		uriBuilder.addParameter( "featured", "" );
 		HttpGet get = new HttpGet( uriBuilder.build() );
 		logInfo( "Executing " + get );
@@ -118,7 +109,7 @@ public class RestClient
 		String[] customerAttributes = new String[] {"name", "address", "telephone", "email", "username", "password"};
 		JSONObject jsonObject = Utils.getJsonObject( request, customerAttributes );
 		HttpClient client = new DefaultHttpClient();
-		URIBuilder uriBuilder = getUriBuilder( Service.Sales, "customers" );
+		URIBuilder uriBuilder = ServiceProvider.getUriBuilder( ServiceProvider.Service.Sales, "customers" );
 		HttpPost post = new HttpPost( uriBuilder.build() );
 		post.setEntity( new StringEntity( jsonObject.toString(), ContentType.APPLICATION_JSON ) );
 		logInfo( "Executing " + post );
@@ -142,7 +133,7 @@ public class RestClient
 	{
 		HttpClient client = new DefaultHttpClient();
 		JSONObject jsonObject = Utils.getJsonObject( request, "username", "password" );
-		URIBuilder uriBuilder = getUriBuilder( Service.Sales, "authenticate" );
+		URIBuilder uriBuilder = ServiceProvider.getUriBuilder( ServiceProvider.Service.Sales, "authenticate" );
 		HttpPost post = new HttpPost( uriBuilder.build() );
 		post.setEntity( new StringEntity( jsonObject.toString(), ContentType.APPLICATION_JSON ) );
 		logInfo( "Executing " + post );
@@ -179,7 +170,7 @@ public class RestClient
 			URISyntaxException
 	{
 		HttpClient client = new DefaultHttpClient();
-		URIBuilder uriBuilder = getUriBuilder( Service.Sales, "customers", customerId, "orders" );
+		URIBuilder uriBuilder = ServiceProvider.getUriBuilder( ServiceProvider.Service.Sales, "customers", customerId, "orders" );
 		uriBuilder.addParameter( "status", "Initial" );
 		HttpGet get = new HttpGet( uriBuilder.build() );
 		logInfo( "Executing " + get );
@@ -230,7 +221,7 @@ public class RestClient
 	private static void populateProductInfo(OrderItem orderItem) throws ClientProtocolException, IOException, JSONException, URISyntaxException
 	{
 		HttpClient client = new DefaultHttpClient();
-		URIBuilder uriBuilder = getUriBuilder( Service.Product, "products", orderItem.getSku() );
+		URIBuilder uriBuilder = ServiceProvider.getUriBuilder( ServiceProvider.Service.Product, "products", orderItem.getSku() );
 		HttpGet get = new HttpGet( uriBuilder.build() );
 		logInfo( "Executing " + get );
 		HttpResponse response = client.execute( get );
@@ -306,7 +297,7 @@ public class RestClient
 	private static int getProductAvailability(long sku) throws JSONException, ClientProtocolException, IOException, URISyntaxException
 	{
 		HttpClient client = new DefaultHttpClient();
-		URIBuilder uriBuilder = getUriBuilder( Service.Product, "products", sku );
+		URIBuilder uriBuilder = ServiceProvider.getUriBuilder( ServiceProvider.Service.Product, "products", sku );
 		HttpGet get = new HttpGet( uriBuilder.build() );
 		logInfo( "Executing " + get );
 		HttpResponse response = client.execute( get );
@@ -320,7 +311,7 @@ public class RestClient
 		HttpClient client = new DefaultHttpClient();
 		JSONObject jsonObject = new JSONObject();
 		jsonObject.put( "status", "Initial" );
-		URIBuilder uriBuilder = getUriBuilder( Service.Sales, "customers", customerId, "orders" );
+		URIBuilder uriBuilder = ServiceProvider.getUriBuilder( ServiceProvider.Service.Sales, "customers", customerId, "orders" );
 		HttpPost post = new HttpPost( uriBuilder.build() );
 		post.setEntity( new StringEntity( jsonObject.toString(), ContentType.APPLICATION_JSON ) );
 		logInfo( "Executing " + post );
@@ -337,7 +328,7 @@ public class RestClient
 		JSONObject jsonObject = new JSONObject();
 		jsonObject.put( "sku", sku );
 		jsonObject.put( "quantity", quantity );
-		URIBuilder uriBuilder = getUriBuilder( Service.Sales, "customers", customerId, "orders", orderId, "orderItems" );
+		URIBuilder uriBuilder = ServiceProvider.getUriBuilder( ServiceProvider.Service.Sales, "customers", customerId, "orders", orderId, "orderItems" );
 		HttpPost post = new HttpPost( uriBuilder.build() );
 		post.setEntity( new StringEntity( jsonObject.toString(), ContentType.APPLICATION_JSON ) );
 		logInfo( "Executing " + post );
@@ -364,7 +355,7 @@ public class RestClient
 		HttpClient client = new DefaultHttpClient();
 		JSONObject jsonObject = new JSONObject();
 		jsonObject.put( "quantity", quantity );
-		URIBuilder uriBuilder = getUriBuilder( Service.Sales, "customers", customerId, "orders", orderId, "orderItems", orderItemId );
+		URIBuilder uriBuilder = ServiceProvider.getUriBuilder( ServiceProvider.Service.Sales, "customers", customerId, "orders", orderId, "orderItems", orderItemId );
 		HttpPatch patch = new HttpPatch( uriBuilder.build() );
 		patch.setEntity( new StringEntity( jsonObject.toString(), ContentType.APPLICATION_JSON ) );
 		logInfo( "Executing " + patch );
@@ -376,7 +367,7 @@ public class RestClient
 	private static Long getOrderedProductSku(long customerId, long orderId, long orderItemId) throws JSONException, IOException, URISyntaxException
 	{
 		HttpClient client = new DefaultHttpClient();
-		URIBuilder uriBuilder = getUriBuilder( Service.Sales, "customers", customerId, "orders", orderId, "orderItems", orderItemId );
+		URIBuilder uriBuilder = ServiceProvider.getUriBuilder( ServiceProvider.Service.Sales, "customers", customerId, "orders", orderId, "orderItems", orderItemId );
 		HttpGet get = new HttpGet( uriBuilder.build() );
 		logInfo( "Executing " + get );
 		HttpResponse response = client.execute( get );
@@ -388,7 +379,7 @@ public class RestClient
 	private static void deleteOrderItem(long customerId, long orderId, long orderItemId) throws JSONException, IOException, URISyntaxException
 	{
 		HttpClient client = new DefaultHttpClient();
-		URIBuilder uriBuilder = getUriBuilder( Service.Sales, "customers", customerId, "orders", orderId, "orderItems", orderItemId );
+		URIBuilder uriBuilder = ServiceProvider.getUriBuilder( ServiceProvider.Service.Sales, "customers", customerId, "orders", orderId, "orderItems", orderItemId );
 		HttpDelete delete = new HttpDelete( uriBuilder.build() );
 		logInfo( "Executing " + delete );
 		HttpResponse response = client.execute( delete );
@@ -471,7 +462,7 @@ public class RestClient
 		jsonObject.put( "orderNumber", (Long)request.getSession().getAttribute( "orderId" ) );
 		logInfo( jsonObject.toString() );
 		HttpClient client = new DefaultHttpClient();
-		URIBuilder uriBuilder = getUriBuilder( Service.Billing, "process" );
+		URIBuilder uriBuilder = ServiceProvider.getUriBuilder( ServiceProvider.Service.Billing, "process" );
 		HttpPost post = new HttpPost( uriBuilder.build() );
 		post.setEntity( new StringEntity( jsonObject.toString(), ContentType.APPLICATION_JSON ) );
 		logInfo( "Executing " + post );
@@ -485,7 +476,7 @@ public class RestClient
 	private static void refundTransaction(int transactionNumber) throws URISyntaxException, ClientProtocolException, IOException
 	{
 		HttpClient client = new DefaultHttpClient();
-		URIBuilder uriBuilder = getUriBuilder( Service.Billing, "refund", transactionNumber );
+		URIBuilder uriBuilder = ServiceProvider.getUriBuilder( ServiceProvider.Service.Billing, "refund", transactionNumber );
 		HttpPost post = new HttpPost( uriBuilder.build() );
 		logInfo( "Executing " + post );
 		HttpResponse response = client.execute( post );
@@ -504,7 +495,7 @@ public class RestClient
 		}
 		JSONArray jsonArray = new JSONArray( list );
 		HttpClient client = new DefaultHttpClient();
-		URIBuilder uriBuilder = getUriBuilder( Service.Product, "reduce" );
+		URIBuilder uriBuilder = ServiceProvider.getUriBuilder( ServiceProvider.Service.Product, "reduce" );
 		HttpPost post = new HttpPost( uriBuilder.build() );
 		post.setEntity( new StringEntity( jsonArray.toString(), ContentType.APPLICATION_JSON ) );
 		logInfo( "Executing " + post );
@@ -527,7 +518,7 @@ public class RestClient
 		jsonObject.put( "transactionNumber", transactionNumber );
 		jsonObject.put( "transactionDate", transactionDate );
 
-		URIBuilder uriBuilder = getUriBuilder( Service.Sales, "customers", customerId, "orders", orderId );
+		URIBuilder uriBuilder = ServiceProvider.getUriBuilder( ServiceProvider.Service.Sales, "customers", customerId, "orders", orderId );
 		HttpPatch patch = new HttpPatch( uriBuilder.build() );
 		patch.setEntity( new StringEntity( jsonObject.toString(), ContentType.APPLICATION_JSON ) );
 		logInfo( "Executing " + patch );
@@ -536,47 +527,13 @@ public class RestClient
 		logInfo( "Got response " + responseString );
 	}
 
-	private static URIBuilder getUriBuilder(Service service, Object... path)
-	{
-		URIBuilder uriBuilder = new URIBuilder();
-		uriBuilder.setScheme( "http" );
-		StringWriter stringWriter = new StringWriter();
-		switch( service )
-		{
-			case Product:
-				uriBuilder.setHost( "product" + DOMAIN );
-				//stringWriter.append( "/product" );
-				break;
-
-			case Sales:
-				uriBuilder.setHost( "sales" + DOMAIN );
-				//stringWriter.append( "/sales" );
-				break;
-
-			case Billing:
-				uriBuilder.setHost( "billing" + DOMAIN );
-				//stringWriter.append( "/billing" );
-				break;
-
-			default:
-				throw new IllegalStateException( "Unknown service" );
-		}
-		uriBuilder.setPort( 80 );
-		for( Object part : path )
-		{
-			stringWriter.append( '/' ).append( String.valueOf( part ) );
-		}
-		uriBuilder.setPath( stringWriter.toString() );
-		return uriBuilder;
-	}
-
 	public static void getOrderHistory(HttpServletRequest request) throws URISyntaxException, ParseException, IOException, JSONException
 	{
 		@SuppressWarnings("unchecked")
 		Map<String, Object> customer = (Map<String, Object>)request.getSession().getAttribute( "customer" );
 		long customerId = (Long)customer.get( "id" );
 		HttpClient client = new DefaultHttpClient();
-		URIBuilder uriBuilder = getUriBuilder( Service.Sales, "customers", customerId, "orders" );
+		URIBuilder uriBuilder = ServiceProvider.getUriBuilder( ServiceProvider.Service.Sales, "customers", customerId, "orders" );
 		HttpGet get = new HttpGet( uriBuilder.build() );
 		logInfo( "Executing " + get );
 		HttpResponse response = client.execute( get );

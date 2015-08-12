@@ -1,0 +1,10 @@
+<settings xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.1.0 http://maven.apache.org/xsd/settings-1.1.0.xsd">
+  <localRepository xmlns="http://maven.apache.org/SETTINGS/1.1.0">/opt/eap/.m2/repository</localRepository>
+  <mirrors xmlns="http://maven.apache.org/SETTINGS/1.1.0">
+    <mirror>
+      <mirrorOf>*</mirrorOf>
+      <url>http://192.168.122.1:8081/nexus/content/groups/public</url>
+      <id>mirror</id>
+    </mirror>
+  </mirrors>
+</settings>

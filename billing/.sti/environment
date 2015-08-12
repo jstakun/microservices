@@ -1,1 +1,1 @@
-MAVEN_ARGS="-X package -Popenshift -DskipTests -Dcom.redhat.xpaas.repo.redhatga -S .sti/settings.xml"
+MAVEN_ARGS="-X -S .sti/settings.xml package -Popenshift -DskipTests -Dcom.redhat.xpaas.repo.redhatga "

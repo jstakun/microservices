@@ -1,1 +1,1 @@
-MAVEN_ARGS="-X package -Popenshift -DskipTests -Dcom.redhat.xpaas.repo.redhatga -s $LOCAL_SOURCE_DIR/.sti/settings.xml"
+MAVEN_ARGS="-X package -Popenshift -DskipTests -Dcom.redhat.xpaas.repo.redhatga -s ./.sti/settings.xml"

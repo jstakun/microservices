@@ -99,4 +99,6 @@ if [ -d $LOCAL_SOURCE_DIR/modules ]; then
   cp -vr $LOCAL_SOURCE_DIR/modules/* $JBOSS_HOME/modules/
 fi
 
+echo "---> S2I ASSEMBLE COMPLETED"
+
 exit 0

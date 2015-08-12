@@ -1,6 +1,6 @@
 #!/bin/sh
 
-echo "Assembly script started!"
+echo "Assemble script started!"
 
 # Source code provided to STI is at ${HOME}/source
 LOCAL_SOURCE_DIR=${HOME}/source
@@ -101,6 +101,6 @@ if [ -d $LOCAL_SOURCE_DIR/modules ]; then
   cp -vr $LOCAL_SOURCE_DIR/modules/* $JBOSS_HOME/modules/
 fi
 
-echo "Assembly script completed!"
+echo "Assemble script completed!"
 
 exit 0

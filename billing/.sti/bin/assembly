@@ -1,5 +1,7 @@
 #!/bin/sh
 
+echo "Assembly script started!"
+
 # Source code provided to STI is at ${HOME}/source
 LOCAL_SOURCE_DIR=${HOME}/source
 mkdir -p $LOCAL_SOURCE_DIR

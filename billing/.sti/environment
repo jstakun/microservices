@@ -1,2 +1,2 @@
-#MAVEN_ARGS="-X package -Popenshift -DskipTests -Dcom.redhat.xpaas.repo.redhatga"
-MAVEN_ARGS="-X package"
+#MAVEN_ARGS="package -Popenshift -DskipTests -Dcom.redhat.xpaas.repo.redhatga"
+MAVEN_ARGS="package -X"

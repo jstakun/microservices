@@ -1,2 +1,2 @@
 #MAVEN_ARGS="package -Popenshift -DskipTests -Dcom.redhat.xpaas.repo.redhatga"
-MAVEN_ARGS="package -X"
+MAVEN_ARGS="package"

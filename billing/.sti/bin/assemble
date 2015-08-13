@@ -70,7 +70,7 @@ if [ -f "$LOCAL_SOURCE_DIR/pom.xml" ]; then
   echo "Using $(mvn --version)"
 
   # Execute the actual build
-  mvn -e $MAVEN_ARGS
+  mvn -e -X -Popenshift -DskipTests -Dcom.redhat.xpaas.repo.redhatga $MAVEN_ARGS
 
   ERR=$?
   if [ $ERR -ne 0 ]; then

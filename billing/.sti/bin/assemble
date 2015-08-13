@@ -50,44 +50,9 @@ cat <<'EOF' >$HOME/.m2/settings.xml
                 <mirror>
                         <mirrorOf>*</mirrorOf>
                         <url>http://192.168.122.1:8081/nexus/content/groups/public</url>
-                        <id>nexus</id>
+                        <id>mirror</id>
                 </mirror>
         </mirrors> 
-        <profiles>
-                <profile>
-                        <id>nexus</id>
-                        <activation>
-                              <activeByDefault>true</activeByDefault>
-                        </activation>
-                        <repositories>
-                                <repository>
-                                        <id>central</id>
-                                        <url>http://192.168.122.1:8081/nexus/content/groups/public</url>
-                                        <releases>
-                                                <enabled>true</enabled>
-                                        </releases>
-                                        <snapshots>
-                                                <enabled>true</enabled>
-                                        </snapshots>
-                                </repository>
-                        </repositories>
-                        <pluginRepositories>
-                                <pluginRepository>
-                                        <id>central</id>
-                                        <url>http://192.168.122.1:8081/nexus/content/groups/public</url>
-                                        <releases>
-                                                <enabled>true</enabled>
-                                        </releases>
-                                        <snapshots>
-                                                <enabled>true</enabled>
-                                        </snapshots>
-                                </pluginRepository>
-                        </pluginRepositories>
-                </profile>
-        </profiles>
-        <activeProfiles>
-                <activeProfile>nexus</activeProfile>
-        </activeProfiles>
 </settings>
 EOF
 

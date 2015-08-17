@@ -66,13 +66,13 @@ if [ -f "$LOCAL_SOURCE_DIR/pom.xml" ]; then
   fi
 
   echo "Found pom.xml... attempting to build with 'mvn -e ${MAVEN_ARGS}'"
-  #echo "Found pom.xml... attempting to build with 'mvn -e -X -Popenshift -DskipTests -Dcom.redhat.xpaas.repo.redhatga package'"
+  #echo "Found pom.xml... attempting to build with 'mvn -e -X -s .m2/settings.xml -Popenshift -DskipTests -Dcom.redhat.xpaas.repo.redhatga package'"
 
   echo "Using $(mvn --version)"
 
   # Execute the actual build
   mvn -e ${MAVEN_ARGS}
-  #mvn -e -X -Popenshift -DskipTests -Dcom.redhat.xpaas.repo.redhatga package
+  #mvn -e -X -s .m2/settings.xml -Popenshift -DskipTests -Dcom.redhat.xpaas.repo.redhatga package
 
   ERR=$?
   if [ $ERR -ne 0 ]; then

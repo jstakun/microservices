@@ -2,6 +2,8 @@ package com.redhat.refarch.microservices.presentation;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -26,6 +28,9 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPatch;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.utils.URIBuilder;
+import org.apache.http.conn.scheme.Scheme;
+import org.apache.http.conn.ssl.SSLSocketFactory;
+import org.apache.http.conn.ssl.TrustStrategy;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
@@ -87,32 +92,46 @@ public class RestClient
 	{
 		HttpClient client = new DefaultHttpClient();
 		
-		//TODO testing
-		HttpGet get = new HttpGet( ServiceProvider.getOSEv3ApiUrl("salesapp", ServiceProvider.ApiEndpoint.Routes).build() );
-		get.addHeader("Authorization", "Bearer " + ServiceProvider.TOKEN);
-		logInfo( "Executing " + get );
-		HttpResponse response = client.execute( get );
-		String responseString = EntityUtils.toString( response.getEntity() );
-		if (responseString.startsWith("{")) {
-			JSONObject json = new JSONObject( responseString );
-			logInfo( "Received " + json.getString("kind") );
-		} else {
-			logInfo( "Received " + responseString); 
+		//TODO testing		
+		try {
+			SSLSocketFactory sf = new SSLSocketFactory(new TrustStrategy() {
+                public boolean isTrusted(X509Certificate[] certificate, String authType)
+                    throws CertificateException {
+                    //trust all certs
+                    return true;
+                }
+            }, SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
+            client.getConnectionManager().getSchemeRegistry().register(new Scheme("https", 8443, sf));
+            
+            HttpGet get = new HttpGet( ServiceProvider.getOSEv3ApiUrl("salesapp", ServiceProvider.ApiEndpoint.Routes).build() );
+    		get.addHeader("Authorization", "Bearer " + ServiceProvider.TOKEN);
+    		logInfo( "Executing " + get );
+    		HttpResponse response = client.execute( get );
+    		String responseString = EntityUtils.toString( response.getEntity() );
+    		if (responseString.startsWith("{")) {
+    			JSONObject json = new JSONObject( responseString );
+    			logInfo( "Received " + json.getString("kind") );
+    		} else {
+    			logInfo( "Received " + responseString); 
+    		}
+		} catch (Exception ex) {
+			ex.printStackTrace();
 		}
+						
 		//
 		
 		URIBuilder uriBuilder = ServiceProvider.getUriBuilder( ServiceProvider.Service.Product, "products" );
 		uriBuilder.addParameter( "featured", "" );
-		get = new HttpGet( uriBuilder.build() );
+		HttpGet get = new HttpGet( uriBuilder.build() );
 		logInfo( "Executing " + get );
-		response = client.execute( get );
+		HttpResponse response = client.execute( get );
 		if( isError( response ) )
 		{
 			throw new HttpErrorException( response );
 		}
 		else
 		{
-			responseString = EntityUtils.toString( response.getEntity() );
+			String responseString = EntityUtils.toString( response.getEntity() );
 			JSONArray jsonArray = new JSONArray( responseString );
 			List<Map<String, Object>> products = Utils.getList( jsonArray );
 			return products;

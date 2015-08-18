@@ -24,6 +24,11 @@ public class ServiceProvider {
 
 	private static final Logger logger = Logger.getLogger( ServiceProvider.class.getName() );
 	
+	private static final String MASTER_HOST = "master.osecloud.com";
+	private static final int MASTER_HTTP_PORT = 80;
+	private static final int MASTER_HTTPS_PORT = 8443;
+	private static final String TOKEN = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJrdWJlcm5ldGVzL3NlcnZpY2VhY2NvdW50Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9uYW1lc3BhY2UiOiJzYWxlc2FwcCIsImt1YmVybmV0ZXMuaW8vc2VydmljZWFjY291bnQvc2VjcmV0Lm5hbWUiOiJlYXAtc2VydmljZS1hY2NvdW50LXRva2VuLXNzdTc1Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9zZXJ2aWNlLWFjY291bnQubmFtZSI6ImVhcC1zZXJ2aWNlLWFjY291bnQiLCJrdWJlcm5ldGVzLmlvL3NlcnZpY2VhY2NvdW50L3NlcnZpY2UtYWNjb3VudC51aWQiOiJjYjAzMjk2ZC00NTk1LTExZTUtYjNhNi01MjU0MDAxNWUzZDEiLCJzdWIiOiJzeXN0ZW06c2VydmljZWFjY291bnQ6c2FsZXNhcHA6ZWFwLXNlcnZpY2UtYWNjb3VudCJ9.gSGqaDsOD2xbxj7FbtumNiWrltg5CKsMTEig20REPANJkJv03BN5ydeYP5b4cBFoNvz8VQ55w1-fr3xCW6bN6QnBBZbJfQZfYEL4L75WpyjapSxGSfzwex1z5S0HF9roJ1Sx0kvmO3d58p8AfspQDTVdOt3s6AaDLT2DFqKEzy5J_P_ffascvZREPfZcZ5gaILbgLgywtiw1c2w8gLZ_1nmlhahejk_0ZLMxLkFUZ1OUxLxZT_d8yGdW7Z19v61gCi-ACAUny48zD_sLQz0pdxDloiGKvZILlj_l8C8mU9O69MIjX9dGInlW7a0fix4n5RWSNKfmJGTKXpyA0kaD0Q";
+	
 	private static final Map<String, String> routes = new HashMap<String, String>();
 	
 	static {
@@ -31,8 +36,6 @@ public class ServiceProvider {
 		routes.put("sales", "localhost");
 		routes.put("billing", "localhost");
 	}
-	
-	private static final String TOKEN = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJrdWJlcm5ldGVzL3NlcnZpY2VhY2NvdW50Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9uYW1lc3BhY2UiOiJzYWxlc2FwcCIsImt1YmVybmV0ZXMuaW8vc2VydmljZWFjY291bnQvc2VjcmV0Lm5hbWUiOiJlYXAtc2VydmljZS1hY2NvdW50LXRva2VuLXNzdTc1Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9zZXJ2aWNlLWFjY291bnQubmFtZSI6ImVhcC1zZXJ2aWNlLWFjY291bnQiLCJrdWJlcm5ldGVzLmlvL3NlcnZpY2VhY2NvdW50L3NlcnZpY2UtYWNjb3VudC51aWQiOiJjYjAzMjk2ZC00NTk1LTExZTUtYjNhNi01MjU0MDAxNWUzZDEiLCJzdWIiOiJzeXN0ZW06c2VydmljZWFjY291bnQ6c2FsZXNhcHA6ZWFwLXNlcnZpY2UtYWNjb3VudCJ9.gSGqaDsOD2xbxj7FbtumNiWrltg5CKsMTEig20REPANJkJv03BN5ydeYP5b4cBFoNvz8VQ55w1-fr3xCW6bN6QnBBZbJfQZfYEL4L75WpyjapSxGSfzwex1z5S0HF9roJ1Sx0kvmO3d58p8AfspQDTVdOt3s6AaDLT2DFqKEzy5J_P_ffascvZREPfZcZ5gaILbgLgywtiw1c2w8gLZ_1nmlhahejk_0ZLMxLkFUZ1OUxLxZT_d8yGdW7Z19v61gCi-ACAUny48zD_sLQz0pdxDloiGKvZILlj_l8C8mU9O69MIjX9dGInlW7a0fix4n5RWSNKfmJGTKXpyA0kaD0Q";
 	
 	private static final ServiceProvider instance = new ServiceProvider();
 	
@@ -53,6 +56,11 @@ public class ServiceProvider {
             }, SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
             client.getConnectionManager().getSchemeRegistry().register(new Scheme("https", 8443, sf));
             
+            Map<String, String> env = System.getenv();
+            for (String envName : env.keySet()) {
+                logger.log(Level.INFO, "Env variable: " + envName);
+            }
+            
             HttpGet get = new HttpGet( getOSEv3ApiUrl("salesapp", ServiceProvider.ApiEndpoint.Routes).build() );
     		get.addHeader("Authorization", "Bearer " + ServiceProvider.TOKEN);
     		logger.log(Level.INFO, "Executing " + get );
@@ -66,6 +74,7 @@ public class ServiceProvider {
     				String host = spec.getString("host");
     				String name = spec.getJSONObject("to").getString("name");
     				routes.put(name, host);
+    				logger.log(Level.INFO, "Found route " + name);
     			}
     		} else {
     			logger.log(Level.INFO, "Received following response: " + responseString); 
@@ -107,7 +116,7 @@ public class ServiceProvider {
 			default:
 				throw new IllegalStateException( "Unknown service" );
 		}
-		uriBuilder.setPort( 80 );
+		uriBuilder.setPort( MASTER_HTTP_PORT );
 		for( Object part : path )
 		{
 			stringWriter.append( '/' ).append( String.valueOf( part ) );
@@ -119,8 +128,8 @@ public class ServiceProvider {
 	private URIBuilder getOSEv3ApiUrl(String namespace, ApiEndpoint apiEndpoint) {
 		URIBuilder uriBuilder = new URIBuilder();
 		uriBuilder.setScheme("https");
-		uriBuilder.setHost("master.osecloud.com");
-		uriBuilder.setPort(8443);
+		uriBuilder.setHost(MASTER_HOST);
+		uriBuilder.setPort(MASTER_HTTPS_PORT);
 		switch (apiEndpoint) {
 			case Pods:
 				uriBuilder.setPath("/api/v1/namespaces/" + namespace + "/pods");

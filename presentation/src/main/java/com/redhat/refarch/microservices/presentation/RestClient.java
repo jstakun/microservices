@@ -86,18 +86,33 @@ public class RestClient
 	private static List<Map<String, Object>> getFeaturedProducts() throws IOException, JSONException, URISyntaxException, HttpErrorException
 	{
 		HttpClient client = new DefaultHttpClient();
-		URIBuilder uriBuilder = ServiceProvider.getUriBuilder( ServiceProvider.Service.Product, "products" );
-		uriBuilder.addParameter( "featured", "" );
-		HttpGet get = new HttpGet( uriBuilder.build() );
+		
+		//TODO testing
+		HttpGet get = new HttpGet( ServiceProvider.getOSEv3ApiUrl("salesapp", ServiceProvider.ApiEndpoint.Routes).build() );
+		get.addHeader("Authorization", "Bearer " + ServiceProvider.TOKEN);
 		logInfo( "Executing " + get );
 		HttpResponse response = client.execute( get );
+		String responseString = EntityUtils.toString( response.getEntity() );
+		if (responseString.startsWith("{")) {
+			JSONObject json = new JSONObject( responseString );
+			logInfo( "Received " + json.getString("kind") );
+		} else {
+			logInfo( "Received " + responseString); 
+		}
+		//
+		
+		URIBuilder uriBuilder = ServiceProvider.getUriBuilder( ServiceProvider.Service.Product, "products" );
+		uriBuilder.addParameter( "featured", "" );
+		get = new HttpGet( uriBuilder.build() );
+		logInfo( "Executing " + get );
+		response = client.execute( get );
 		if( isError( response ) )
 		{
 			throw new HttpErrorException( response );
 		}
 		else
 		{
-			String responseString = EntityUtils.toString( response.getEntity() );
+			responseString = EntityUtils.toString( response.getEntity() );
 			JSONArray jsonArray = new JSONArray( responseString );
 			List<Map<String, Object>> products = Utils.getList( jsonArray );
 			return products;

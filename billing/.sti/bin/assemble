@@ -56,8 +56,8 @@ if [ -f "$LOCAL_SOURCE_DIR/pom.xml" ]; then
   echo "Using $(mvn --version)"
 
   # Execute the actual build
-  #mvn -e ${MAVEN_ARGS}
-  mvn -e -X -s maven/settings.xml -Popenshift -DskipTests -Dcom.redhat.xpaas.repo.redhatga package
+  
+  mvn -e -s maven/settings.xml -Popenshift -DskipTests -Dcom.redhat.xpaas.repo.redhatga package
 
   ERR=$?
   if [ $ERR -ne 0 ]; then
@@ -80,7 +80,7 @@ if [ -f "$LOCAL_SOURCE_DIR/pom.xml" ]; then
   fi
 
   # clean up after maven
-  mvn -e -Dcom.redhat.xpaas.repo.redhatga clean
+  mvn -e -s maven/settings.xml -Dcom.redhat.xpaas.repo.redhatga clean
   if [ -d "$HOME/.m2/repository" ]; then
     rm -r "$HOME/.m2/repository"
   fi

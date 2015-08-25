@@ -57,6 +57,9 @@ if [ -f "$LOCAL_SOURCE_DIR/pom.xml" ]; then
 
   # Execute the actual build
   #mvn -e ${MAVEN_ARGS}
+  
+  mvn help:effective-settings
+  
   mvn -e -X -s maven/settings.xml -Popenshift -DskipTests -Dcom.redhat.xpaas.repo.redhatga package
 
   ERR=$?

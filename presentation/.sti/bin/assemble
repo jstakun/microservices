@@ -55,8 +55,12 @@ if [ -f "$LOCAL_SOURCE_DIR/pom.xml" ]; then
 
   echo "Using $(mvn --version)"
 
+  echo "Printing global settings:"
+  
   cat /usr/share/maven/conf/settings.xml
 
+  echo "Printing user settings:"
+   
   cat /home/jboss/source/maven/settings.xml
  
   # Execute the actual build

@@ -55,14 +55,6 @@ if [ -f "$LOCAL_SOURCE_DIR/pom.xml" ]; then
 
   echo "Using $(mvn --version)"
 
-  echo "Printing global settings:"
-  
-  cat /usr/share/maven/conf/settings.xml
-
-  echo "Printing user settings:"
-   
-  cat /home/jboss/source/maven/settings.xml
- 
   # Execute the actual build
   
   mvn -e -X -s maven/settings.xml -Popenshift -DskipTests -Dcom.redhat.xpaas.repo.redhatga package
@@ -88,7 +80,7 @@ if [ -f "$LOCAL_SOURCE_DIR/pom.xml" ]; then
   fi
 
   # clean up after maven
-  mvn -e -Dcom.redhat.xpaas.repo.redhatga clean
+  mvn -e -s maven/settings.xml -Dcom.redhat.xpaas.repo.redhatga clean
   if [ -d "$HOME/.m2/repository" ]; then
     rm -r "$HOME/.m2/repository"
   fi

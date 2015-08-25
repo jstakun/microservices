@@ -55,18 +55,11 @@ if [ -f "$LOCAL_SOURCE_DIR/pom.xml" ]; then
 
   echo "Using $(mvn --version)"
 
+  cat /usr/share/maven/conf/settings.xml
+
+  cat /home/jboss/source/maven/settings.xml
+ 
   # Execute the actual build
-  #mvn -e ${MAVEN_ARGS}
-  
-  echo "Printing help:effective-settings..."
-  
-  mvn help:effective-settings
-  
-  echo "Printing help:effective-pom..."
-  
-  mvn help:effective-pom
-  
-  echo "Executing maven package..."
   
   mvn -e -X -s maven/settings.xml -Popenshift -DskipTests -Dcom.redhat.xpaas.repo.redhatga package
 

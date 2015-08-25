@@ -60,6 +60,8 @@ if [ -f "$LOCAL_SOURCE_DIR/pom.xml" ]; then
   
   mvn help:effective-settings
   
+  mvn help:effective-pom
+  
   mvn -e -X -s maven/settings.xml -Popenshift -DskipTests -Dcom.redhat.xpaas.repo.redhatga package
 
   ERR=$?

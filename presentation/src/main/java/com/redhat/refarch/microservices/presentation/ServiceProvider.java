@@ -2,6 +2,7 @@ package com.redhat.refarch.microservices.presentation;
 
 import java.io.InputStream;
 import java.io.StringWriter;
+import java.net.URL;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.util.HashMap;
@@ -48,9 +49,16 @@ public class ServiceProvider {
             }, SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
             client.getConnectionManager().getSchemeRegistry().register(new Scheme("https", 8443, sf));
             
-        	InputStream inputStream  = ServiceProvider.class.getClassLoader().getResourceAsStream("osemaster.properties");
-        	properties.load(inputStream);
-    		
+            URL url = ServiceProvider.class.getClass().getResource("/");
+        	logger.log(Level.INFO, "Url is " + url.toString());
+        	
+        	InputStream inputStream  = ServiceProvider.class.getClass().getClassLoader().getResourceAsStream("osemaster.properties");
+        	if (inputStream != null) {
+        		properties.load(inputStream);
+        	} else {
+        		logger.log(Level.SEVERE, "Input stream is null !");
+        	}
+        	
     		String[] routesArr = StringUtils.split(properties.getProperty("route", "product,sales,billing"), ",");
     		
     		for (int i=0;i<routesArr.length;i++) {

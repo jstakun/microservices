@@ -2,7 +2,6 @@ package com.redhat.refarch.microservices.presentation;
 
 import java.io.InputStream;
 import java.io.StringWriter;
-import java.net.URL;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.util.HashMap;

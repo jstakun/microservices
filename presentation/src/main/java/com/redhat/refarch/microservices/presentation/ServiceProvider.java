@@ -48,10 +48,10 @@ public class ServiceProvider {
             }, SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
             client.getConnectionManager().getSchemeRegistry().register(new Scheme("https", 8443, sf));
             
-        	InputStream inputStream  = ServiceProvider.class.getResourceAsStream("/osemaster.properties");
+        	InputStream inputStream  = ServiceProvider.class.getClassLoader().getResourceAsStream("/osemaster.properties");
     		properties.load(inputStream);
     		
-    		String[] routesArr = StringUtils.split(properties.getProperty("route"), ",");
+    		String[] routesArr = StringUtils.split(properties.getProperty("route", "product,sales,billing"), ",");
     		
     		for (int i=0;i<routesArr.length;i++) {
     			String name = routesArr[i];

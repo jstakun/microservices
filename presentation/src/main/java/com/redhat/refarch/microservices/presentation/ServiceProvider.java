@@ -54,7 +54,9 @@ public class ServiceProvider {
     		String[] routesArr = StringUtils.split(properties.getProperty("route"), ",");
     		
     		for (int i=0;i<routesArr.length;i++) {
-    			routes.put(routesArr[i], "localhost");
+    			String name = routesArr[i];
+    			logger.log(Level.INFO, "Creating route " + name);
+    			routes.put(name, "localhost");
     		}
     		
             Map<String, String> env = System.getenv();

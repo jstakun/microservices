@@ -49,10 +49,10 @@ public class ServiceProvider {
             }, SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
             client.getConnectionManager().getSchemeRegistry().register(new Scheme("https", 8443, sf));
             
-            URL url = ServiceProvider.class.getClass().getResource("/");
+            URL url = this.getClass().getResource("/");
         	logger.log(Level.INFO, "Url is " + url.toString());
         	
-        	InputStream inputStream  = ServiceProvider.class.getClass().getClassLoader().getResourceAsStream("osemaster.properties");
+        	InputStream inputStream  = this.getClass().getClassLoader().getResourceAsStream("osemaster.properties");
         	if (inputStream != null) {
         		properties.load(inputStream);
         	} else {

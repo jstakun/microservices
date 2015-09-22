@@ -49,7 +49,7 @@ public class ServiceProvider {
             client.getConnectionManager().getSchemeRegistry().register(new Scheme("https", 8443, sf));
             
         	InputStream inputStream  = ServiceProvider.class.getClassLoader().getResourceAsStream("osemaster.properties");
-    		properties.load(inputStream);
+        	properties.load(inputStream);
     		
     		String[] routesArr = StringUtils.split(properties.getProperty("route", "product,sales,billing"), ",");
     		

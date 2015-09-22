@@ -49,17 +49,14 @@ public class ServiceProvider {
             }, SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
             client.getConnectionManager().getSchemeRegistry().register(new Scheme("https", 8443, sf));
             
-            URL url = this.getClass().getResource("/");
-        	logger.log(Level.INFO, "Url is " + url.toString());
-        	
-        	InputStream inputStream  = this.getClass().getClassLoader().getResourceAsStream("osemaster.properties");
+            InputStream inputStream  = this.getClass().getResourceAsStream("osemaster.properties");
         	if (inputStream != null) {
         		properties.load(inputStream);
         	} else {
-        		logger.log(Level.SEVERE, "Input stream is null !");
+        		throw new NullPointerException("Input stream is null !");
         	}
         	
-    		String[] routesArr = StringUtils.split(properties.getProperty("route", "product,sales,billing"), ",");
+    		String[] routesArr = StringUtils.split(properties.getProperty("routes", "product,sales,billing"), ",");
     		
     		for (int i=0;i<routesArr.length;i++) {
     			String name = routesArr[i];
@@ -67,10 +64,10 @@ public class ServiceProvider {
     			routes.put(name, "localhost");
     		}
     		
-            Map<String, String> env = System.getenv();
-            for (String envName : env.keySet()) {
-                logger.log(Level.INFO, "Env variable: " + envName);
-            }
+            //Map<String, String> env = System.getenv();
+            //for (String envName : env.keySet()) {
+            //    logger.log(Level.INFO, "Env variable: " + envName);
+            //}
             
             HttpGet get = new HttpGet( getOSEv3ApiUrl("salesapp", ServiceProvider.ApiEndpoint.Routes).build() );
     		get.addHeader("Authorization", "Bearer " + properties.getProperty("token"));
@@ -92,7 +89,7 @@ public class ServiceProvider {
     		}
     		
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			logger.log(Level.SEVERE, ex.getMessage(), ex);
 		}	   
 	}
 	

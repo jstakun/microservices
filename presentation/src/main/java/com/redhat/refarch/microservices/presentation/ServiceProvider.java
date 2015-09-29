@@ -174,6 +174,7 @@ public class ServiceProvider {
 				break;
 			case Services:
 				uriBuilder.setPath("/api/v1/namespaces/" + namespace + "/services");
+				break;
 			default:
 				throw new IllegalStateException( "Unknown API endpoint" );	
 		}

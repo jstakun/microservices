@@ -70,41 +70,49 @@ public class ServiceProvider {
             //    logger.log(Level.INFO, "Env variable: " + envName);
             //}
             
-            HttpGet get = new HttpGet( getOSEv3ApiUrl("salesapp", ServiceProvider.ApiEndpoint.Routes).build() );
+            HttpGet get = new HttpGet( getOSEv3ApiUrl(properties.getProperty("project", "salesapp"), ServiceProvider.ApiEndpoint.Routes).build() );
     		get.addHeader("Authorization", "Bearer " + properties.getProperty("token"));
     		logger.log(Level.INFO, "Executing " + get );
     		HttpResponse response = client.execute( get );
     		String responseString = EntityUtils.toString( response.getEntity() );
     		if (responseString.startsWith("{")) {
     			JSONObject root = new JSONObject( responseString );
-    			JSONArray items = root.getJSONArray("items");
-    			for (int i = 0 ;i < items.length(); i++) {
-    				JSONObject spec = items.getJSONObject(i).getJSONObject("spec");
-    				String host = spec.getString("host");
-    				String name = spec.getJSONObject("to").getString("name");
-    				routes.put(name, host);
-    				logger.log(Level.INFO, "Found route " + name + " to " + host);
+    			JSONArray items = root.optJSONArray("items");
+    			if (items != null) {
+    				for (int i = 0 ;i < items.length(); i++) {
+    					JSONObject spec = items.getJSONObject(i).getJSONObject("spec");
+    					String host = spec.getString("host");
+    					String name = spec.getJSONObject("to").getString("name");
+    					routes.put(name, host);
+    					logger.log(Level.INFO, "Found route " + name + " to " + host);
+    				}
+    			} else {
+    				logger.log(Level.INFO, "Received following response: " + responseString);
     			}
     		} else {
     			logger.log(Level.INFO, "Received following response: " + responseString); 
     		}
     		
-    		HttpGet get2 = new HttpGet( getOSEv3ApiUrl("salesapp", ServiceProvider.ApiEndpoint.Services).build() );
+    		HttpGet get2 = new HttpGet( getOSEv3ApiUrl(properties.getProperty("project", "salesapp"), ServiceProvider.ApiEndpoint.Services).build() );
     		get2.addHeader("Authorization", "Bearer " + properties.getProperty("token"));
     		logger.log(Level.INFO, "Executing " + get );
     		HttpResponse response2 = client.execute( get );
     		String responseString2 = EntityUtils.toString( response2.getEntity() );
     		if (responseString2.startsWith("{")) {
     			JSONObject root = new JSONObject( responseString2 );
-    			JSONArray items = root.getJSONArray("items");
-    			for (int i = 0 ;i < items.length(); i++) {
-    				String host = items.getJSONObject(i).getJSONObject("spec").getString("clusterIP");
-    				String name = items.getJSONObject(i).getJSONObject("metadata").getString("name");
-    				services.put(name, host);
-    				logger.log(Level.INFO, "Found service " + name + " at " + host);
-    			} 
+    			JSONArray items = root.optJSONArray("items");
+    			if (items != null) {
+    				for (int i = 0 ;i < items.length(); i++) {
+    					String host = items.getJSONObject(i).getJSONObject("spec").getString("clusterIP");
+    					String name = items.getJSONObject(i).getJSONObject("metadata").getString("name");
+    					services.put(name, host);
+    					logger.log(Level.INFO, "Found service " + name + " at " + host);
+    				} 
+    			} else {
+    				logger.log(Level.INFO, "Received following response: " + responseString2);
+    			}
     		} else {
-    			logger.log(Level.INFO, "Received following response: " + responseString); 
+    			logger.log(Level.INFO, "Received following response: " + responseString2); 
     		}
     		
 		} catch (Exception ex) {

@@ -95,8 +95,8 @@ public class ServiceProvider {
     		
     		HttpGet get2 = new HttpGet( getOSEv3ApiUrl(properties.getProperty("project", "salesapp"), ServiceProvider.ApiEndpoint.Services).build() );
     		get2.addHeader("Authorization", "Bearer " + properties.getProperty("token"));
-    		logger.log(Level.INFO, "Executing " + get );
-    		HttpResponse response2 = client.execute( get );
+    		logger.log(Level.INFO, "Executing " + get2 );
+    		HttpResponse response2 = client.execute( get2 );
     		String responseString2 = EntityUtils.toString( response2.getEntity() );
     		if (responseString2.startsWith("{")) {
     			JSONObject root = new JSONObject( responseString2 );
@@ -131,6 +131,12 @@ public class ServiceProvider {
 
 	protected URIBuilder getUriBuilder(Service service, Object... path)
 	{
+		return getRouteUriBuilder(service, path);
+		//return getServiceUriBuilder(service, path);
+	}
+	
+	private URIBuilder getRouteUriBuilder(Service service, Object... path)
+	{
 		URIBuilder uriBuilder = new URIBuilder();
 		uriBuilder.setScheme( "http" );
 		StringWriter stringWriter = new StringWriter();
@@ -152,6 +158,37 @@ public class ServiceProvider {
 				throw new IllegalStateException( "Unknown service" );
 		}
 		uriBuilder.setPort(Integer.valueOf(properties.getProperty("http_port", "80")));
+		for( Object part : path )
+		{
+			stringWriter.append( '/' ).append( String.valueOf( part ) );
+		}
+		uriBuilder.setPath( stringWriter.toString() );
+		return uriBuilder;
+	};
+	
+	private URIBuilder getServiceUriBuilder(Service service, Object... path)
+	{
+		URIBuilder uriBuilder = new URIBuilder();
+		uriBuilder.setScheme( "http" );
+		StringWriter stringWriter = new StringWriter();
+		switch( service )
+		{
+			case Product:
+				uriBuilder.setHost( services.get("product") );
+				break;
+	
+			case Sales:
+				uriBuilder.setHost( services.get("sales") );
+				break;
+	
+			case Billing:
+				uriBuilder.setHost( services.get("billing") );
+				break;
+	
+			default:
+				throw new IllegalStateException( "Unknown service" );
+		}
+		uriBuilder.setPort(Integer.valueOf(properties.getProperty("service_http_port", "8080")));
 		for( Object part : path )
 		{
 			stringWriter.append( '/' ).append( String.valueOf( part ) );

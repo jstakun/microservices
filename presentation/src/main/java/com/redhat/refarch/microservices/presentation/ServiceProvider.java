@@ -28,6 +28,7 @@ public class ServiceProvider {
 	private static final Logger logger = Logger.getLogger( ServiceProvider.class.getName() );
 	private final Properties properties = new Properties();
 	private final Map<String, String> routes = new HashMap<String, String>();
+	private final Map<String, String> services = new HashMap<String, String>();
 	
 	private static final ServiceProvider instance = new ServiceProvider();
 	
@@ -61,6 +62,7 @@ public class ServiceProvider {
     			String name = routesArr[i];
     			logger.log(Level.INFO, "Creating route " + name);
     			routes.put(name, "localhost");
+    			services.put(name, "127.0.0.1");
     		}
     		
             //Map<String, String> env = System.getenv();
@@ -81,8 +83,26 @@ public class ServiceProvider {
     				String host = spec.getString("host");
     				String name = spec.getJSONObject("to").getString("name");
     				routes.put(name, host);
-    				logger.log(Level.INFO, "Found route " + name);
+    				logger.log(Level.INFO, "Found route " + name + " to " + host);
     			}
+    		} else {
+    			logger.log(Level.INFO, "Received following response: " + responseString); 
+    		}
+    		
+    		HttpGet get2 = new HttpGet( getOSEv3ApiUrl("salesapp", ServiceProvider.ApiEndpoint.Services).build() );
+    		get2.addHeader("Authorization", "Bearer " + properties.getProperty("token"));
+    		logger.log(Level.INFO, "Executing " + get );
+    		HttpResponse response2 = client.execute( get );
+    		String responseString2 = EntityUtils.toString( response2.getEntity() );
+    		if (responseString2.startsWith("{")) {
+    			JSONObject root = new JSONObject( responseString2 );
+    			JSONArray items = root.getJSONArray("items");
+    			for (int i = 0 ;i < items.length(); i++) {
+    				String host = items.getJSONObject(i).getJSONObject("spec").getString("clusterIP");
+    				String name = items.getJSONObject(i).getJSONObject("metadata").getString("name");
+    				services.put(name, host);
+    				logger.log(Level.INFO, "Found service " + name + " at " + host);
+    			} 
     		} else {
     			logger.log(Level.INFO, "Received following response: " + responseString); 
     		}
@@ -98,7 +118,7 @@ public class ServiceProvider {
 	}
 	
 	private enum ApiEndpoint {
-		Pods, Routes;
+		Pods, Routes, Services;
 	}
 
 	protected URIBuilder getUriBuilder(Service service, Object... path)
@@ -144,6 +164,8 @@ public class ServiceProvider {
 			case Routes:
 				uriBuilder.setPath("/oapi/v1/namespaces/" + namespace + "/routes");
 				break;
+			case Services:
+				uriBuilder.setPath("/api/v1/namespaces/" + namespace + "/services");
 			default:
 				throw new IllegalStateException( "Unknown API endpoint" );	
 		}

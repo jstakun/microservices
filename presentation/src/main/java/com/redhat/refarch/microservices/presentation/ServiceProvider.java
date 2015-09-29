@@ -131,8 +131,8 @@ public class ServiceProvider {
 
 	protected URIBuilder getUriBuilder(Service service, Object... path)
 	{
-		return getRouteUriBuilder(service, path);
-		//return getServiceUriBuilder(service, path);
+		//return getRouteUriBuilder(service, path);
+		return getServiceUriBuilder(service, path);
 	}
 	
 	private URIBuilder getRouteUriBuilder(Service service, Object... path)

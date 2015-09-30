@@ -65,13 +65,13 @@ public class ServiceProvider {
     			services.put(name, "127.0.0.1");
     		}
     		
-            Map<String, String> env = System.getenv();
-            for (String envName : env.keySet()) {
-                logger.log(Level.INFO, "Env variable: " + envName);
-            }
+            //Map<String, String> env = System.getenv();
+            //for (String envName : env.keySet()) {
+            //    logger.log(Level.INFO, "Env variable: " + envName);
+            //}
             
             HttpGet get = new HttpGet( getOSEv3ApiUrl(properties.getProperty("project", "salesapp"), ServiceProvider.ApiEndpoint.Routes).build() );
-    		get.addHeader("Authorization", "Bearer " + properties.getProperty("token")); //TODO token env var
+    		get.addHeader("Authorization", "Bearer " + getToken()); 
     		logger.log(Level.INFO, "Executing " + get );
     		HttpResponse response = client.execute( get );
     		String responseString = EntityUtils.toString( response.getEntity() );
@@ -94,7 +94,7 @@ public class ServiceProvider {
     		}
     		
     		HttpGet get2 = new HttpGet( getOSEv3ApiUrl(properties.getProperty("project", "salesapp"), ServiceProvider.ApiEndpoint.Services).build() );
-    		get2.addHeader("Authorization", "Bearer " + properties.getProperty("token")); //TODO token env var
+    		get2.addHeader("Authorization", "Bearer " + getToken()); 
     		logger.log(Level.INFO, "Executing " + get2 );
     		HttpResponse response2 = client.execute( get2 );
     		String responseString2 = EntityUtils.toString( response2.getEntity() );
@@ -218,4 +218,11 @@ public class ServiceProvider {
 		return uriBuilder;
 	}
 	
+	private String getToken() {
+		String token = System.getenv("API_TOKEN");
+		if (token == null || token.length() == 0) {
+		    token = properties.getProperty("token"); 	
+		}
+		return token;
+	}
 }

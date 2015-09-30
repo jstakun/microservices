@@ -32,6 +32,7 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
+import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
 import com.redhat.refarch.microservices.product.model.Error;
@@ -275,6 +276,13 @@ public class ProductService
 		{
 			throw new Error( HttpURLConnection.HTTP_INTERNAL_ERROR, e ).asException();
 		}
+	}
+	
+	@GET
+	@Path("/info")
+	@Produces({"application/json", "application/xml"})
+	public Response info() {
+		return Response.status(200).entity("Product service version 1.0.0").build();
 	}
 
 	@Target({ElementType.METHOD})

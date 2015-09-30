@@ -6,10 +6,12 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Response;
 
 import com.redhat.refarch.microservices.billing.model.Result;
 import com.redhat.refarch.microservices.billing.model.Result.Status;
@@ -57,6 +59,13 @@ public class BillingService
 	public void refund(@PathParam("transactionNumber") int transactionNumber)
 	{
 		logInfo( "Asked to refund credit card transaction: " + transactionNumber );
+	}
+	
+	@GET
+	@Path("/info")
+	@Produces({"application/json", "application/xml"})
+	public Response info() {
+		return Response.status(200).entity("Billing service version 1.0.0").build();
 	}
 
 	private void logInfo(String message)

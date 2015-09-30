@@ -26,6 +26,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Response;
 
 import com.redhat.refarch.microservices.sales.model.Customer;
 import com.redhat.refarch.microservices.sales.model.Error;
@@ -459,6 +460,15 @@ public class SalesService
 			throw new Error( HttpURLConnection.HTTP_INTERNAL_ERROR, e ).asException();
 		}
 	}
+	
+	@GET
+	@Path("/info")
+	@Produces({"application/json", "application/xml"})
+	public Response info() {
+		return Response.status(200).entity("Sales service version 1.0.0").build();
+	}
+	
+	
 
 	private void logInfo(String message)
 	{

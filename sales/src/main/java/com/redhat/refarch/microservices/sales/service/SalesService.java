@@ -463,9 +463,9 @@ public class SalesService
 	
 	@GET
 	@Path("/info")
-	@Produces({"application/json", "application/xml"})
+	@Produces({"application/xml"})
 	public Response info() {
-		return Response.status(200).entity("Sales service version 1.0.0").build();
+		return Response.status(200).entity("<info><name>Sales service</name><version>1.0.0</version></info>").build();
 	}
 	
 	

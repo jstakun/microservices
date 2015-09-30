@@ -63,9 +63,9 @@ public class BillingService
 	
 	@GET
 	@Path("/info")
-	@Produces({"application/json", "application/xml"})
+	@Produces({"application/xml"})
 	public Response info() {
-		return Response.status(200).entity("Billing service version 1.0.0").build();
+		return Response.status(200).entity("<info><name>Billing service</name><version>1.0.0</version></info>").build();
 	}
 
 	private void logInfo(String message)

@@ -280,9 +280,9 @@ public class ProductService
 	
 	@GET
 	@Path("/info")
-	@Produces({"application/json", "application/xml"})
+	@Produces({"application/xml"})
 	public Response info() {
-		return Response.status(200).entity("Product service version 1.0.0").build();
+		return Response.status(200).entity("<info><name>Product service</name><version>1.0.0</version></info>").build();
 	}
 
 	@Target({ElementType.METHOD})

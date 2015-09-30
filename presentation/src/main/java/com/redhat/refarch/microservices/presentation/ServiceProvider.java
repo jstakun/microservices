@@ -221,7 +221,10 @@ public class ServiceProvider {
 	private String getToken() {
 		String token = System.getenv("API_TOKEN");
 		if (token == null || token.length() == 0) {
-		    token = properties.getProperty("token"); 	
+			logger.log(Level.INFO, "Reading token from config file");
+		    token = properties.getProperty("token"); 
+		} else {
+			logger.log(Level.INFO, "Reading token from environment variable");
 		}
 		return token;
 	}

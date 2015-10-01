@@ -41,12 +41,13 @@ public class ServiceProvider {
 	}
 	
 	private ServiceProvider() {
-            //Map<String, String> env = System.getenv();
-            //for (String envName : env.keySet()) {
-            //    logger.log(Level.INFO, "Env variable: " + envName);
-            //}
+        //Map<String, String> env = System.getenv();
+        //for (String envName : env.keySet()) {
+        //    logger.log(Level.INFO, "Env variable: " + envName);
+        //}
+		
 		try {
-			InputStream inputStream  = ServiceProvider.class.getClass().getResourceAsStream("osemaster.properties");
+			InputStream inputStream  = this.getClass().getResourceAsStream("osemaster.properties");
         	if (inputStream != null) {
         		properties.load(inputStream);
         	} else {

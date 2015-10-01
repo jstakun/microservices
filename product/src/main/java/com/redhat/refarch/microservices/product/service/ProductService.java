@@ -52,6 +52,8 @@ public class ProductService
 
 	private Logger logger = Logger.getLogger( getClass().getName() );
 
+	private static final String VERSION = "1.0.1";
+	
 	@Path("/products")
 	@POST
 	@Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
@@ -282,7 +284,7 @@ public class ProductService
 	@Path("/info")
 	@Produces({"application/xml"})
 	public Response info() {
-		return Response.status(200).entity("<info><name>Product service</name><version>1.0.0</version></info>").build();
+		return Response.status(200).entity("<info><name>Product service</name><version>" + VERSION + "</version></info>").build();
 	}
 
 	@Target({ElementType.METHOD})

@@ -45,15 +45,12 @@ public class ServiceProvider {
             //for (String envName : env.keySet()) {
             //    logger.log(Level.INFO, "Env variable: " + envName);
             //}
-	}
-		
-	private static void initialize() {          
 		try {
 			InputStream inputStream  = ServiceProvider.class.getClass().getResourceAsStream("osemaster.properties");
         	if (inputStream != null) {
         		properties.load(inputStream);
         	} else {
-        		throw new NullPointerException("Input stream is null !");
+        		throw new NullPointerException("Input stream is null !!!");
         	}
         	
     		String[] routesArr = StringUtils.split(properties.getProperty("routes", "product,sales,billing"), ",");
@@ -63,8 +60,14 @@ public class ServiceProvider {
     			logger.log(Level.INFO, "Creating route " + name);
     			routes.put(name, "localhost");
     			services.put(name, "127.0.0.1");
-    		}	
-			
+    		}
+		} catch (Exception ex) {
+			logger.log(Level.SEVERE, ex.getMessage(), ex);
+		}	
+	}
+		
+	private static void initialize() {          
+		try {
 			SSLSocketFactory sf = new SSLSocketFactory(new TrustStrategy() {
 	                public boolean isTrusted(X509Certificate[] certificate, String authType)
 	                    throws CertificateException {

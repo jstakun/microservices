@@ -26,30 +26,30 @@ import org.codehaus.jettison.json.JSONObject;
 public class ServiceProvider {
 
 	private static final Logger logger = Logger.getLogger( ServiceProvider.class.getName() );
-	private final Properties properties = new Properties();
-	private final Map<String, String> routes = new HashMap<String, String>();
-	private final Map<String, String> services = new HashMap<String, String>();
+	private static final Properties properties = new Properties();
+	private static final Map<String, String> routes = new HashMap<String, String>();
+	private static final Map<String, String> services = new HashMap<String, String>();
+	private static boolean initialized = false;
 	
 	private static final ServiceProvider instance = new ServiceProvider();
 	
 	public static ServiceProvider getInstance() {
+		if (!initialized) {
+			initialize();
+		}
 		return instance;
 	}
 	
 	private ServiceProvider() {
-		HttpClient client = new DefaultHttpClient();
+            //Map<String, String> env = System.getenv();
+            //for (String envName : env.keySet()) {
+            //    logger.log(Level.INFO, "Env variable: " + envName);
+            //}
+	}
 		
+	private static void initialize() {          
 		try {
-			SSLSocketFactory sf = new SSLSocketFactory(new TrustStrategy() {
-                public boolean isTrusted(X509Certificate[] certificate, String authType)
-                    throws CertificateException {
-                    //trust all certs
-                    return true;
-                }
-            }, SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
-            client.getConnectionManager().getSchemeRegistry().register(new Scheme("https", 8443, sf));
-            
-            InputStream inputStream  = this.getClass().getResourceAsStream("osemaster.properties");
+			InputStream inputStream  = ServiceProvider.class.getClass().getResourceAsStream("osemaster.properties");
         	if (inputStream != null) {
         		properties.load(inputStream);
         	} else {
@@ -63,13 +63,19 @@ public class ServiceProvider {
     			logger.log(Level.INFO, "Creating route " + name);
     			routes.put(name, "localhost");
     			services.put(name, "127.0.0.1");
-    		}
-    		
-            //Map<String, String> env = System.getenv();
-            //for (String envName : env.keySet()) {
-            //    logger.log(Level.INFO, "Env variable: " + envName);
-            //}
-            
+    		}	
+			
+			SSLSocketFactory sf = new SSLSocketFactory(new TrustStrategy() {
+	                public boolean isTrusted(X509Certificate[] certificate, String authType)
+	                    throws CertificateException {
+	                    //trust all certs
+	                    return true;
+	                }
+	        }, SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
+	        
+			HttpClient client = new DefaultHttpClient();
+			client.getConnectionManager().getSchemeRegistry().register(new Scheme("https", 8443, sf));
+	            
             HttpGet get = new HttpGet( getOSEv3ApiUrl(properties.getProperty("project", "salesapp"), ServiceProvider.ApiEndpoint.Routes).build() );
     		get.addHeader("Authorization", "Bearer " + getToken()); 
     		logger.log(Level.INFO, "Executing " + get );
@@ -108,6 +114,7 @@ public class ServiceProvider {
     					services.put(name, host);
     					logger.log(Level.INFO, "Found service " + name + " at " + host);
     				} 
+    				initialized = true;
     			} else {
     				logger.log(Level.INFO, "Received following response: " + responseString2);
     			}
@@ -197,7 +204,7 @@ public class ServiceProvider {
 		return uriBuilder;
 	};
 
-	private URIBuilder getOSEv3ApiUrl(String namespace, ApiEndpoint apiEndpoint) {
+	private static URIBuilder getOSEv3ApiUrl(String namespace, ApiEndpoint apiEndpoint) {
 		URIBuilder uriBuilder = new URIBuilder();
 		uriBuilder.setScheme("https");
 		uriBuilder.setHost(properties.getProperty("host"));
@@ -218,7 +225,7 @@ public class ServiceProvider {
 		return uriBuilder;
 	}
 	
-	private String getToken() {
+	private static String getToken() {
 		String token = System.getenv("API_TOKEN");
 		if (token == null || token.length() == 0) {
 			logger.log(Level.INFO, "Reading token from config file");

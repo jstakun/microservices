@@ -10,13 +10,14 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
 
+@Path("/")
 public class EventBusInboundService {
 
 	private Logger logger = Logger.getLogger( getClass().getName() );
 	
 	@POST
 	@Path("/event/customer/{id}")
-	@Consumes({"*/*"})
+	@Consumes({"application/json", "application/xml"})
 	@Produces({"application/xml"})
 	public Response newCustomerEvent(Long id) {
 		logInfo("New customer " + id + " created");
@@ -25,7 +26,7 @@ public class EventBusInboundService {
 	
 	@POST
 	@Path("/event/order/{id}")
-	@Consumes({"*/*"})
+	@Consumes({"application/json", "application/xml"})
 	@Produces({"application/xml"})
 	public Response newOrderEvent(Long id) {
 		logInfo("New order " + id + " created");
@@ -33,8 +34,8 @@ public class EventBusInboundService {
 	}
 	
 	@POST
-	@Path("/event/order/{id}")
-	@Consumes({"*/*"})
+	@Path("/event/product/{id}")
+	@Consumes({"application/json", "application/xml"})
 	@Produces({"application/xml"})
 	public Response newProductEvent(Long id) {
 		logInfo("New product " + id + " created");
@@ -43,6 +44,7 @@ public class EventBusInboundService {
 	
 	@GET
 	@Path("/info")
+	@Consumes({"*/*"})
 	@Produces({"application/xml"})
 	public Response info() {
 		return Response.status(200).entity("<info><name>Event bus service</name><version>1.0.0</version></info>").build();

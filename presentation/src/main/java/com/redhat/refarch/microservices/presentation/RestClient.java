@@ -293,6 +293,7 @@ public class RestClient
 				updateOrderItem( request, customerId, orderId, orderItemId, sku, quantity );
 			}
 		}
+		emitOrderEvent(orderId);
 		getPendingOrder( request, customerId );
 	}
 
@@ -603,4 +604,21 @@ public class RestClient
 			return (int)( order2.getId() - order1.getId() );
 		}
 	};
+	
+	private static void emitOrderEvent(Long orderId) {
+		try {
+			HttpClient client = new DefaultHttpClient();
+			JSONObject jsonObject = new JSONObject();
+			jsonObject.put( "id", orderId );
+			URIBuilder uriBuilder = ServiceProvider.getInstance().getUriBuilder( ServiceProvider.Service.EventBus, "event", "order", orderId );
+			HttpPost post = new HttpPost( uriBuilder.build() );
+			post.setEntity( new StringEntity( jsonObject.toString(), ContentType.APPLICATION_JSON ) );
+			logInfo( "Executing " + post );
+			HttpResponse response = client.execute( post );
+			String responseString = EntityUtils.toString( response.getEntity() );
+			logInfo( "Got response " + responseString );
+		} catch (Exception e) {
+			logger.log(Level.SEVERE, e.getMessage(), e);
+		}
+	}
 }

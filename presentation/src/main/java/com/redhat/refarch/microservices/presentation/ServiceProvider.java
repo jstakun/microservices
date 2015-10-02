@@ -54,7 +54,7 @@ public class ServiceProvider {
         		throw new NullPointerException("Input stream is null !!!");
         	}
         	
-    		String[] routesArr = StringUtils.split(properties.getProperty("routes", "product,sales,billing"), ",");
+    		String[] routesArr = StringUtils.split(properties.getProperty("routes", "product,sales,billing,eventbus"), ",");
     		
     		for (int i=0;i<routesArr.length;i++) {
     			String name = routesArr[i];
@@ -133,7 +133,7 @@ public class ServiceProvider {
 	
 	protected enum Service
 	{
-		Product, Sales, Billing
+		Product, Sales, Billing, EventBus
 	}
 	
 	private enum ApiEndpoint {
@@ -164,7 +164,11 @@ public class ServiceProvider {
 			case Billing:
 				uriBuilder.setHost( routes.get("billing") );
 				break;
-	
+				
+			case EventBus:
+				uriBuilder.setHost( routes.get("eventbus") );
+				break;
+				
 			default:
 				throw new IllegalStateException( "Unknown service" );
 		}
@@ -195,7 +199,11 @@ public class ServiceProvider {
 			case Billing:
 				uriBuilder.setHost( services.get("billing") );
 				break;
-	
+	       
+			case EventBus:
+				uriBuilder.setHost( services.get("eventbus") );
+				break;	
+				
 			default:
 				throw new IllegalStateException( "Unknown service" );
 		}

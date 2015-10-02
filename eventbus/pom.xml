@@ -1,0 +1,44 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.redhat.refarch.microservices</groupId>
+  <artifactId>eventbus</artifactId>
+  <version>0.0.1</version>
+  
+  <properties>
+  	 <version.jboss.bom>6.4.0.GA</version.jboss.bom>
+  </properties>
+  
+  <dependencyManagement>
+        <dependencies>
+           <dependency>
+				<groupId>org.jboss.bom.eap</groupId>
+				<artifactId>jboss-javaee-6.0-with-tools</artifactId>
+				<version>${version.jboss.bom}</version>
+				<type>pom</type>
+                <scope>import</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.jboss.bom.eap</groupId>
+				<artifactId>jboss-javaee-6.0-with-hibernate</artifactId>
+				<version>${version.jboss.bom}</version>
+				<type>pom</type>
+                <scope>import</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.jboss.bom.eap</groupId>
+				<artifactId>jboss-javaee-6.0-with-resteasy</artifactId>
+				<version>${version.jboss.bom}</version>
+				<type>pom</type>
+                <scope>import</scope>
+			</dependency>
+        </dependencies>
+    </dependencyManagement>
+    
+    <dependencies>
+    	<dependency>
+            <groupId>org.jboss.resteasy</groupId>
+            <artifactId>resteasy-jaxrs</artifactId>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
+</project>

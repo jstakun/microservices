@@ -21,7 +21,7 @@ public class EventBusInboundService {
 	@Produces({"application/xml"})
 	public Response newCustomerEvent(Long id) {
 		logInfo("New customer " + id + " created");
-		return Response.status(200).entity("<status>newCustomer event received</status>").build();
+		return Response.status(200).entity("<status>newCustomer " + id + " event received</status>").build();
 	}
 	
 	@POST
@@ -30,7 +30,7 @@ public class EventBusInboundService {
 	@Produces({"application/xml"})
 	public Response newOrderEvent(Long id) {
 		logInfo("New order " + id + " created");
-		return Response.status(200).entity("<status>newOrder event received</status>").build();
+		return Response.status(200).entity("<status>newOrder " + id + " event received</status>").build();
 	}
 	
 	@POST
@@ -39,7 +39,7 @@ public class EventBusInboundService {
 	@Produces({"application/xml"})
 	public Response newProductEvent(Long id) {
 		logInfo("New product " + id + " created");
-		return Response.status(200).entity("<status>newProduct event received</status>").build();
+		return Response.status(200).entity("<status>newProduct " + id + " event received</status>").build();
 	}
 	
 	@GET

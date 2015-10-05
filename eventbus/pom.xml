@@ -3,6 +3,7 @@
   <groupId>com.redhat.refarch.microservices</groupId>
   <artifactId>eventbus</artifactId>
   <version>0.0.1</version>
+  <packaging>war</packaging>
   
   <properties>
   	 <version.jboss.bom>6.4.0.GA</version.jboss.bom>

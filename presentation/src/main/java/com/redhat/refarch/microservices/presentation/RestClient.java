@@ -128,6 +128,7 @@ public class RestClient
 			request.getSession().setAttribute( "customer", Utils.getCustomer( jsonObject ) );
 			request.getSession().setAttribute( "itemCount", 0 );
 			getPendingOrder( request, jsonObject.getLong( "id" ) );
+			emitCustomerEvent(jsonObject.getLong( "id" ));
 		}
 	}
 
@@ -606,13 +607,18 @@ public class RestClient
 	};
 	
 	private static void emitOrderEvent(Long orderId) {
+		emitEvent("event", "order", orderId);
+	}
+	
+	private static void emitCustomerEvent(Long customerId) {
+		emitEvent("event", "customer", customerId);
+	}
+	
+	private static void emitEvent(Object... params) {
 		try {
 			HttpClient client = new DefaultHttpClient();
-			JSONObject jsonObject = new JSONObject();
-			jsonObject.put( "id", orderId );
-			URIBuilder uriBuilder = ServiceProvider.getInstance().getUriBuilder( ServiceProvider.Service.EventBus, "event", "order", orderId );
+			URIBuilder uriBuilder = ServiceProvider.getInstance().getUriBuilder( ServiceProvider.Service.EventBus, params);
 			HttpPost post = new HttpPost( uriBuilder.build() );
-			post.setEntity( new StringEntity( jsonObject.toString(), ContentType.APPLICATION_JSON ) );
 			logInfo( "Executing " + post );
 			HttpResponse response = client.execute( post );
 			String responseString = EntityUtils.toString( response.getEntity() );

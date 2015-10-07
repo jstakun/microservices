@@ -10,6 +10,7 @@
   	 <version.wildfly.maven.plugin>1.0.2.Final</version.wildfly.maven.plugin>
   	 <version.war.plugin>2.5</version.war.plugin>
   	 <version.surefire.plugin>2.10</version.surefire.plugin>
+  	 <jboss.fuse.bom.version>6.1.1.redhat-423</jboss.fuse.bom.version>
   </properties>
   
   <dependencyManagement>
@@ -35,14 +36,43 @@
 				<type>pom</type>
                 <scope>import</scope>
 			</dependency>
+			<dependency>	
+		    	<groupId>org.jboss.fuse.bom</groupId>
+		    	<artifactId>jboss-fuse-parent</artifactId>
+		    	<version>${jboss.fuse.bom.version}</version>
+		    	<type>pom</type>
+		    	<scope>import</scope>
+	     	</dependency>	
         </dependencies>
     </dependencyManagement>
     
     <dependencies>
+        <!-- resteasy -->
     	<dependency>
             <groupId>org.jboss.resteasy</groupId>
             <artifactId>resteasy-jaxrs</artifactId>
             <scope>provided</scope>
+        </dependency>
+        
+        <!-- camel -->
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-spring</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-servlet</artifactId>
+        </dependency>
+        
+        <!-- spring web -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-web</artifactId>
+            <version>3.2.12.RELEASE</version>
         </dependency>
     </dependencies>
     

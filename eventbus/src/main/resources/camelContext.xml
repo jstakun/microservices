@@ -6,7 +6,19 @@
        http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd">
 
   <camelContext id="EventBus" xmlns="http://camel.apache.org/schema/spring" trace="false">
-    <route customId="true" id="Customer Route">
+     
+    <restConfiguration bindingMode="auto" component="servlet" contextPath="/camel/v3/event" />
+     
+    <rest>
+  		<get uri="/customer/{id}">
+    		<to uri="mock:result"/>
+  		</get>
+	    <get uri="/order/{id}">
+    		<to uri="mock:result"/>
+  		</get>
+	</rest>
+    
+        <route customId="true" id="Customer Route">
         <from uri="servlet:///v2/event/customer"/>
         <log message="New customer ${header.id} received" loggingLevel="INFO"/>
         <transform>
@@ -20,6 +32,7 @@
            <simple>New order event ${header.id} received</simple>
         </transform>
     </route>
+    
   </camelContext>
 
 </beans>

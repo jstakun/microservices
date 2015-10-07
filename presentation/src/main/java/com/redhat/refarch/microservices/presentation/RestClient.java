@@ -607,11 +607,11 @@ public class RestClient
 	};
 	
 	private static void emitOrderEvent(Long orderId) {
-		emitEvent("v3", "event", "order", orderId);
+		emitEvent("camel", "v3", "event", "order", orderId);
 	}
 	
 	private static void emitCustomerEvent(Long customerId) {
-		emitEvent("v3", "event", "customer", customerId);
+		emitEvent("camel", "v3", "event", "customer", customerId);
 	}
 	
 	private static void emitEvent(Object... params) {

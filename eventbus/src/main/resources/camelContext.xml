@@ -16,6 +16,12 @@
 	    <get uri="/v3/event/order/{id}">
     		<to uri="direct:processOrderEvent"/>
   		</get>
+  		<post uri="/v3/event/customer/{id}">
+    		<to uri="direct:processCustomerEvent"/>
+  		</post>
+	    <post uri="/v3/event/order/{id}">
+    		<to uri="direct:processOrderEvent"/>
+  		</post>
 	</rest>
     
     <route customId="true" id="Customer Event Route">

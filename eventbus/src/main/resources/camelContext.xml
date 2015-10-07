@@ -5,11 +5,20 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
        http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd">
 
-  <camelContext xmlns="http://camel.apache.org/schema/spring" trace="false">
-    <route customId="true" id="Main Route">
+  <camelContext id="EventBus" xmlns="http://camel.apache.org/schema/spring" trace="false">
+    <route customId="true" id="Customer Route">
         <from uri="servlet:///v2/event/customer"/>
-        <log message="New customer ${header.id} created" loggingLevel="INFO"/>
-        <to uri="mock:result"/>
+        <log message="New customer ${header.id} received" loggingLevel="INFO"/>
+        <transform>
+           <simple>New customer event ${header.id} received</simple>
+        </transform>
+    </route>
+    <route customId="true" id="Order Route">
+        <from uri="servlet:///v2/event/order"/>
+        <log message="New order ${header.id} received" loggingLevel="INFO"/>
+        <transform>
+           <simple>New order event ${header.id} received</simple>
+        </transform>
     </route>
   </camelContext>
 

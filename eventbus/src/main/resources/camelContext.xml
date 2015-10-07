@@ -7,31 +7,44 @@
 
   <camelContext id="EventBus" xmlns="http://camel.apache.org/schema/spring" trace="false">
      
-    <restConfiguration bindingMode="auto" component="servlet" contextPath="/camel/v3/event" />
+    <restConfiguration bindingMode="auto" component="servlet" contextPath="/camel" />
      
     <rest>
-  		<get uri="/customer/{id}">
-    		<to uri="mock:result"/>
+  		<get uri="/v3/event/customer/{id}">
+    		<to uri="direct:processCustomerEvent"/>
   		</get>
-	    <get uri="/order/{id}">
-    		<to uri="mock:result"/>
+	    <get uri="/v3/event/order/{id}">
+    		<to uri="direct:processOrderEvent"/>
   		</get>
 	</rest>
     
-        <route customId="true" id="Customer Route">
+    <route customId="true" id="Customer Event Route">
         <from uri="servlet:///v2/event/customer"/>
+        <to uri="direct:processCustomerEvent"/>
+    </route>
+    
+    <route customId="true" id="Order Event Route">
+        <from uri="servlet:///v2/event/order"/>
+        <to uri="direct:processOrderEvent"/>
+    </route>
+    
+    <route customId="true" id="Process Customer Event Route">
+        <from uri="direct:processCustomerEvent"/>
         <log message="New customer ${header.id} received" loggingLevel="INFO"/>
         <transform>
-           <simple>New customer event ${header.id} received</simple>
+            <simple>New customer event ${header.id} received</simple>
         </transform>
     </route>
-    <route customId="true" id="Order Route">
-        <from uri="servlet:///v2/event/order"/>
+   
+    <route customId="true" id="Process Order Event Route">
+        <from uri="direct:processOrderEvent"/>
         <log message="New order ${header.id} received" loggingLevel="INFO"/>
         <transform>
-           <simple>New order event ${header.id} received</simple>
+            <simple>New order event ${header.id} received</simple>
         </transform>
     </route>
+    
+    
     
   </camelContext>
 

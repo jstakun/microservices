@@ -5,6 +5,12 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
        http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd">
 
+  <bean id="activemq" class="org.apache.activemq.camel.component.ActiveMQComponent">
+      	<property name="brokerURL" value="tcp://${env:AMQ_HOST}:${env:AMQ_PORT}"/>
+      	<property name="userName" value="${env:AMQ_USERNAME}"/>
+      	<property name="password" value="${env:AMQ_PASSWORD}"/>
+  </bean>
+
   <camelContext id="EventBus" xmlns="http://camel.apache.org/schema/spring" trace="false">
      
     <restConfiguration bindingMode="auto" component="servlet" contextPath="/camel" />
@@ -40,6 +46,7 @@
         <transform>
             <simple>New customer event ${header.id} received</simple>
         </transform>
+        <to uri="activemq:queue:customers"/>
     </route>
    
     <route customId="true" id="Process Order Event Route">
@@ -48,6 +55,7 @@
         <transform>
             <simple>New order event ${header.id} received</simple>
         </transform>
+        <to uri="activemq:queue:orders"/>
     </route>
     
     

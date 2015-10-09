@@ -8,9 +8,9 @@
   <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer"/>
 
   <bean id="activemq" class="org.apache.activemq.camel.component.ActiveMQComponent">
-      	<property name="brokerURL" value="tcp://${env:AMQ_HOST}:${env:AMQ_PORT}"/>
-      	<property name="userName" value="${env:AMQ_USERNAME}"/>
-      	<property name="password" value="${env:AMQ_PASSWORD}"/>
+      	<property name="brokerURL" value="tcp://${env.AMQ_HOST}:${env.AMQ_PORT}"/>
+      	<property name="userName" value="${env.AMQ_USERNAME}"/>
+      	<property name="password" value="${env.AMQ_PASSWORD}"/>
   </bean>
 
   <camelContext id="EventBus" xmlns="http://camel.apache.org/schema/spring" trace="false">

@@ -51,7 +51,7 @@
         <transform>
             <simple>New customer event ${header.id} received</simple>
         </transform>
-        <to uri="activemq:queue:customers?replyTo=customers-reply"/>
+        <inOnly uri="activemq:queue:customers"/>
     </route>
    
     <route customId="true" id="Process Order Event Route">
@@ -60,7 +60,7 @@
         <transform>
             <simple>New order event ${header.id} received</simple>
         </transform>
-        <to uri="activemq:queue:orders?replyTo=orders-reply"/>
+        <inOnly uri="activemq:queue:orders"/>
     </route>
     
     

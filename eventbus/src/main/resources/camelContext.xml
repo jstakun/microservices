@@ -82,6 +82,11 @@
      	<from uri="activemq:queue:customers"/>
      	<log message="Customer event ${header.id} processed: ${body}" loggingLevel="INFO"/>
      </route>
+     
+     <route customId="true" id="Process Order Event Route">
+     	<from uri="activemq:queue:orders"/>
+     	<log message="Order event ${header.id} processed: ${body}" loggingLevel="INFO"/>
+     </route>
     
   </camelContext>
 

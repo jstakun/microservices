@@ -35,17 +35,17 @@
   		</post>
 	</rest>
     
-    <route customId="true" id="Customer Event Route">
+    <route customId="true" id="Receive Customer Event Route">
         <from uri="servlet:///v2/event/customer"/>
         <to uri="direct:processCustomerEvent"/>
     </route>
     
-    <route customId="true" id="Order Event Route">
+    <route customId="true" id="Receive Order Event Route">
         <from uri="servlet:///v2/event/order"/>
         <to uri="direct:processOrderEvent"/>
     </route>
     
-    <route customId="true" id="Process Customer Event Route">
+    <route customId="true" id="Send Customer Event Route">
         <from uri="direct:processCustomerEvent"/>
         <log message="New customer ${header.id} received" loggingLevel="INFO"/>
         <transform>
@@ -54,7 +54,7 @@
         <inOnly uri="activemq:queue:customers"/>
     </route>
    
-    <route customId="true" id="Process Order Event Route">
+    <route customId="true" id="Send Order Event Route">
         <from uri="direct:processOrderEvent"/>
         <log message="New order ${header.id} received" loggingLevel="INFO"/>
         <transform>
@@ -63,7 +63,10 @@
         <inOnly uri="activemq:queue:orders"/>
     </route>
     
-    
+     <route customId="true" id="Process Customer Event Route">
+     	<from uri="activemq:queue:customers"/>
+     	<log message="Customer event ${header.id} processed: ${body}" loggingLevel="INFO"/>
+     </route>
     
   </camelContext>
 

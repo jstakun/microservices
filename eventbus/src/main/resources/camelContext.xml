@@ -17,19 +17,24 @@
   </bean-->
   
   <bean id="jmsConnectionFactory" class="org.apache.activemq.ActiveMQConnectionFactory">
-		<property name="brokerURL" value="tcp://${AMQ_HOST}:${AMQ_PORT}"/>
+  		<property name="brokerURL" value="tcp://${AMQ_HOST}:${AMQ_PORT}"/>
       	<property name="userName" value="${AMQ_USERNAME}"/>
-      	<property name="password" value="${AMQ_PASSWORD}"/>
-	</bean>
-	<bean id="pooledConnectionFactory" class="org.apache.activemq.pool.PooledConnectionFactory"
-		init-method="start" destroy-method="stop">
-		<property name="maxConnections" value="8" />
-		<property name="connectionFactory" ref="jmsConnectionFactory" />
-	</bean>
-
-	<bean id="jmsTemplate" class="org.springframework.jms.core.JmsTemplate">
-		<property name="connectionFactory" ref="pooledConnectionFactory" />
-	</bean>
+      	<property name="password" value="${AMQ_PASSWORD}"/> 
+  </bean>
+ 
+  <bean id="pooledConnectionFactory" class="org.apache.activemq.pool.PooledConnectionFactory" init-method="start" destroy-method="stop">
+   		<property name="maxConnections" value="8" />
+   		<property name="connectionFactory" ref="jmsConnectionFactory" />
+  </bean>
+ 
+  <bean id="jmsConfig" class="org.apache.camel.component.jms.JmsConfiguration">
+   		<property name="connectionFactory" ref="pooledConnectionFactory"/>
+   		<property name="concurrentConsumers" value="10"/>
+  </bean>
+ 
+  <bean id="activemq" class="org.apache.activemq.camel.component.ActiveMQComponent">
+    	<property name="configuration" ref="jmsConfig"/>
+  </bean>
 
   <camelContext id="EventBus" xmlns="http://camel.apache.org/schema/spring" trace="false">
      

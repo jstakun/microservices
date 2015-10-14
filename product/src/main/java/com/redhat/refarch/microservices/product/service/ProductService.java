@@ -52,7 +52,7 @@ public class ProductService
 
 	private Logger logger = Logger.getLogger( getClass().getName() );
 
-	private static final String VERSION = "1.0.1";
+	private static final String VERSION = "1.0.2";
 	
 	@Path("/products")
 	@POST

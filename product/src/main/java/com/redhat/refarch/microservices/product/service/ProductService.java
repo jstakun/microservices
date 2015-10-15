@@ -5,6 +5,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import java.net.HttpURLConnection;
+import java.net.InetAddress;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
@@ -284,7 +285,14 @@ public class ProductService
 	@Path("/info")
 	@Produces({"application/xml"})
 	public Response info() {
-		return Response.status(200).entity("<info><name>Product service</name><version>" + VERSION + "</version></info>").build();
+		String addr = "127.0.0.1";
+		try {
+			InetAddress ip = InetAddress.getLocalHost();
+			addr = ip.getHostAddress();	  
+		} catch (Exception e) {
+			
+		}
+		return Response.status(200).entity("<info><name>Product service</name><version>" + VERSION + "</version><ip>" + addr + "</ip></info>").build();
 	}
 
 	@Target({ElementType.METHOD})

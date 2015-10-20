@@ -90,7 +90,8 @@
      
      <route customId="true" id="Process Order Event Route">
      	<from uri="activemq:queue:orders"/>
-     	<log message="Order event ${header.id} processed: ${body}" loggingLevel="INFO"/>
+     	<log message="Order event ${header.id} processed" loggingLevel="INFO"/>
+     	<log message="Booked SKU in inventory" loggingLevel="INFO"/>
      </route>
     
   </camelContext>

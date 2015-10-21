@@ -99,9 +99,9 @@
    
     <route customId="true" id="Send New Order Event Route">
         <from uri="direct:processNewOrderEvent"/>
-        <log message="New order ${header.id} received" loggingLevel="INFO"/>
+        <log message="New order ${header.id} event received" loggingLevel="INFO"/>
         <transform>
-            <simple>New order event ${header.id} received</simple>
+            <simple>New order ${header.id} event received</simple>
         </transform>
         <setHeader headerName="type">
     		<constant>create</constant>        
@@ -111,9 +111,9 @@
     
      <route customId="true" id="Send Info Order Event Route">
         <from uri="direct:processInfoOrderEvent"/>
-        <log message="Info order ${header.id} received" loggingLevel="INFO"/>
+        <log message="Order info ${header.id} event received" loggingLevel="INFO"/>
         <transform>
-            <simple>Info order event ${header.id} received</simple>
+            <simple>Order info ${header.id} event received</simple>
         </transform>
         <setHeader headerName="type">
     		<constant>info</constant>        
@@ -123,9 +123,9 @@
     
     <route customId="true" id="Send Delete Order Event Route">
         <from uri="direct:processDeleteOrderEvent"/>
-        <log message="Delete order ${header.id} received" loggingLevel="INFO"/>
+        <log message="Delete order ${header.id} event received" loggingLevel="INFO"/>
         <transform>
-            <simple>Delete order event ${header.id} received</simple>
+            <simple>Delete order ${header.id} event received</simple>
         </transform>
         <setHeader headerName="type">
     		<constant>delete</constant>        
@@ -135,19 +135,19 @@
     
     <route customId="true" id="Process New Order Event Route">
      	<from uri="activemq:queue:orders?selector=type='create'"/>
-     	<log message="Order creation event ${header.id} processed" loggingLevel="INFO"/>
+     	<log message="Created order ${header.id} event processed" loggingLevel="INFO"/>
      	<log message="Booked SKUs in inventory" loggingLevel="INFO"/>
     </route>
      
     <route customId="true" id="Process Delete Order Event Route">
      	<from uri="activemq:queue:orders?selector=type='delete'"/>
-     	<log message="Delete order event ${header.id} processed" loggingLevel="INFO"/>
+     	<log message="Delete order ${header.id} event processed" loggingLevel="INFO"/>
      	<log message="SKUs in inventory released" loggingLevel="INFO"/>
     </route>
      
     <route customId="true" id="Process Info Order Event Route">
      	<from uri="activemq:queue:orders?selector=type='info'"/>
-     	<log message="Order info event ${header.id} processed" loggingLevel="INFO"/>
+     	<log message="Order info ${header.id} event processed" loggingLevel="INFO"/>
      	<log message="Order info provided" loggingLevel="INFO"/>
     </route>
     

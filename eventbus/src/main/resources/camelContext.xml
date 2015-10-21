@@ -80,6 +80,9 @@
         <transform>
             <simple>New order event ${header.id} received</simple>
         </transform>
+        <setHeader headerName="type">
+    		<constant>create</constant>        
+  		</setHeader>
         <inOnly uri="activemq:queue:orders"/>
     </route>
     
@@ -89,7 +92,7 @@
      </route>
      
      <route customId="true" id="Process Order Event Route">
-     	<from uri="activemq:queue:orders"/>
+     	<from uri="activemq:queue:orders?selector=type='create'"/>
      	<log message="Order event ${header.id} processed" loggingLevel="INFO"/>
      	<log message="Booked SKU in inventory" loggingLevel="INFO"/>
      </route>

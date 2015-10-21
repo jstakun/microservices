@@ -614,11 +614,12 @@ public class RestClient
 		emitEvent("camel", "v3", "event", "customer", customerId);
 	}
 	
-	private static void emitEvent(Object... params) {
+	private static void emitEvent(String eventType, Object... params) {
 		try {
 			HttpClient client = new DefaultHttpClient();
 			URIBuilder uriBuilder = ServiceProvider.getInstance().getUriBuilder( ServiceProvider.Service.EventBus, params);
 			HttpPost post = new HttpPost( uriBuilder.build() );
+			//post.setEntity( new StringEntity( "type=create", ContentType.TEXT_PLAIN ) );
 			logInfo( "Executing " + post );
 			HttpResponse response = client.execute( post );
 			String responseString = EntityUtils.toString( response.getEntity() );

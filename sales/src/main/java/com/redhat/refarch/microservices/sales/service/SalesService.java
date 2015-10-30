@@ -468,6 +468,30 @@ public class SalesService
 		return Response.status(200).entity("<info><name>Sales service</name><version>1.0.0</version></info>").build();
 	}
 	
+	@GET
+	@Path("/_status/dbhealthz")
+	@Produces({"application/xml"})
+	public Response dbhealthz() {
+		int count;
+		try {
+			Customer c = em.createNamedQuery( "Customer.findByUsername", Customer.class ).setParameter( "username", "jstakun" ).getSingleResult();
+			if (c != null) {
+				count = 1;
+			} else {
+				count = 0;
+			}
+			logger.log(Level.INFO, "Checked database status with response: " + count);
+		} catch (Exception e) {
+			count = -1;
+			logger.log(Level.SEVERE, e.getMessage(), e);
+		}
+		
+		if (count >= 0) {
+			return Response.status(200).entity("<dbhealtz>ok</dbhealtz>").build();
+		} else {
+			return Response.status(500).entity("<dbhealtz>failed</dbhealtz>").build();
+		}
+	}
 	
 
 	private void logInfo(String message)

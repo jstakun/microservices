@@ -299,15 +299,16 @@ public class ProductService
 	@Path("/_status/dbhealthz")
 	@Produces({"application/xml"})
 	public Response dbhealthz() {
-		int count = 0;
+		int count;
 		try {
 			count = em.createNamedQuery( "Product.findFeatured", Product.class ).getResultList().size();
 			logger.log(Level.INFO, "Checked database status with response: " + count);
 		} catch (Exception e) {
+			count = -1;
 			logger.log(Level.SEVERE, e.getMessage(), e);
 		}
 		
-		if (count > 0) {
+		if (count >= 0) {
 			return Response.status(200).entity("<dbhealtz>ok</dbhealtz>").build();
 		} else {
 			return Response.status(500).entity("<dbhealtz>failed</dbhealtz>").build();

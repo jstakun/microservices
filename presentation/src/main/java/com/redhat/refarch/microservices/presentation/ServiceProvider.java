@@ -212,6 +212,7 @@ public class ServiceProvider {
 		{
 			stringWriter.append( '/' ).append( String.valueOf( part ) );
 		}
+		logger.log(Level.INFO, "Created service path: " + stringWriter.toString());
 		uriBuilder.setPath( stringWriter.toString() );
 		return uriBuilder;
 	};

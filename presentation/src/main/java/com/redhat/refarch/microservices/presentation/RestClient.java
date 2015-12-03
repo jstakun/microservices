@@ -614,7 +614,7 @@ public class RestClient
 		emitEvent("camel", "v3", "event", "customer", customerId);
 	}
 	
-	private static void emitEvent(String eventType, Object... params) {
+	private static void emitEvent(Object... params) {
 		try {
 			HttpClient client = new DefaultHttpClient();
 			URIBuilder uriBuilder = ServiceProvider.getInstance().getUriBuilder( ServiceProvider.Service.EventBus, params);

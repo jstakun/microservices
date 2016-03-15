@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:camel="http://camel.apache.org/schema/spring"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+       http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd">
+
+  <bean id="propertyPlaceholderConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">  
+    	<property name="systemPropertiesModeName" value="SYSTEM_PROPERTIES_MODE_OVERRIDE" />
+    	<property name="searchSystemEnvironment" value="true" />
+  </bean>  
+
+  <!-- bean id="activemq" class="org.apache.activemq.camel.component.ActiveMQComponent">
+      	<property name="brokerURL" value="tcp://${AMQ_HOST}:${AMQ_PORT}"/>
+      	<property name="userName" value="${AMQ_USERNAME}"/>
+      	<property name="password" value="${AMQ_PASSWORD}"/>
+  </bean-->
+  
+  <bean id="jmsConnectionFactory" class="org.apache.activemq.ActiveMQConnectionFactory">
+  		<property name="brokerURL" value="tcp://${AMQ_HOST}:${AMQ_PORT}"/>
+      	<property name="userName" value="${AMQ_USERNAME}"/>
+      	<property name="password" value="${AMQ_PASSWORD}"/> 
+  </bean>
+ 
+  <bean id="pooledConnectionFactory" class="org.apache.activemq.pool.PooledConnectionFactory" init-method="start" destroy-method="stop">
+   		<property name="maxConnections" value="8" />
+   		<property name="connectionFactory" ref="jmsConnectionFactory" />
+  </bean>
+ 
+  <bean id="jmsConfig" class="org.apache.camel.component.jms.JmsConfiguration">
+   		<property name="connectionFactory" ref="pooledConnectionFactory"/>
+   		<property name="concurrentConsumers" value="10"/>
+  </bean>
+ 
+  <bean id="activemq" class="org.apache.activemq.camel.component.ActiveMQComponent">
+    	<property name="configuration" ref="jmsConfig"/>
+  </bean>
+
+  <camelContext id="EventBus" xmlns="http://camel.apache.org/schema/spring" trace="false">
+     
+    <restConfiguration bindingMode="auto" component="servlet" contextPath="/camel" />
+     
+    <rest>
+  		<!-- order -->
+  		<get uri="/v3/event/order/{id}">
+    		<to uri="direct:processInfoOrderEvent"/>
+  		</get>
+  		<post uri="/v3/event/order/{id}">
+    		<to uri="direct:processNewOrderEvent"/>
+  		</post>
+  		<delete uri="/v3/event/order/{id}">
+    		<to uri="direct:processDeleteOrderEvent"/>
+  		</delete>
+  		<!-- customer -->
+  		<get uri="/v3/event/customer/{id}">
+    		<to uri="direct:processCustomerEvent"/>
+  		</get>
+	    <post uri="/v3/event/customer/{id}">
+    		<to uri="direct:processCustomerEvent"/>
+  		</post>
+	    
+	</rest>
+    
+    <!--  customer -->
+    
+    <!-- v2 -->
+    
+    <route customId="true" id="Receive Customer Event Route">
+        <from uri="servlet:///v2/event/customer"/>
+        <to uri="direct:processCustomerEvent"/>
+    </route>
+    
+    <!-- v3 -->
+    
+    <route customId="true" id="Send Customer Event Route">
+        <from uri="direct:processCustomerEvent"/>
+        <log message="New customer ${header.id} received" loggingLevel="INFO"/>
+        <transform>
+            <simple>New customer event ${header.id} received</simple>
+        </transform>
+        <inOnly uri="activemq:queue:customers"/>
+    </route>
+   
+    <route customId="true" id="Process New Customer Event Route">
+     	<from uri="activemq:queue:customers"/>
+     	<log message="Customer event ${header.id} processed: ${body}" loggingLevel="INFO"/>
+    </route>
+     
+    <!-- order -->
+     
+    <!-- v2 -->
+   
+    <route customId="true" id="Receive Order Event Route">
+        <from uri="servlet:///v2/event/order"/>
+        <to uri="direct:processNewOrderEvent"/>
+    </route>
+    
+    <!-- v3 -->
+   
+    <route customId="true" id="Send New Order Event Route">
+        <from uri="direct:processNewOrderEvent"/>
+        <log message="New order ${header.id} event received" loggingLevel="INFO"/>
+        <transform>
+            <simple>New order ${header.id} event received</simple>
+        </transform>
+        <setHeader headerName="type">
+    		<constant>create</constant>        
+  		</setHeader>
+        <inOnly uri="activemq:queue:orders"/>
+    </route>
+    
+     <route customId="true" id="Send Info Order Event Route">
+        <from uri="direct:processInfoOrderEvent"/>
+        <log message="Order info ${header.id} event received" loggingLevel="INFO"/>
+        <transform>
+            <simple>Order info ${header.id} event received</simple>
+        </transform>
+        <setHeader headerName="type">
+    		<constant>info</constant>        
+  		</setHeader>
+        <inOnly uri="activemq:queue:orders"/>
+    </route>
+    
+    <route customId="true" id="Send Delete Order Event Route">
+        <from uri="direct:processDeleteOrderEvent"/>
+        <log message="Delete order ${header.id} event received" loggingLevel="INFO"/>
+        <transform>
+            <simple>Delete order ${header.id} event received</simple>
+        </transform>
+        <setHeader headerName="type">
+    		<constant>delete</constant>        
+  		</setHeader>
+        <inOnly uri="activemq:queue:orders"/>
+    </route>
+    
+    <route customId="true" id="Process New Order Event Route">
+     	<from uri="activemq:queue:orders?selector=type='create'"/>
+     	<log message="Created order ${header.id} event processed" loggingLevel="INFO"/>
+     	<log message="Booked SKUs in inventory" loggingLevel="INFO"/>
+    </route>
+     
+    <route customId="true" id="Process Delete Order Event Route">
+     	<from uri="activemq:queue:orders?selector=type='delete'"/>
+     	<log message="Delete order ${header.id} event processed" loggingLevel="INFO"/>
+     	<log message="SKUs in inventory released" loggingLevel="INFO"/>
+    </route>
+     
+    <route customId="true" id="Process Info Order Event Route">
+     	<from uri="activemq:queue:orders?selector=type='info'"/>
+     	<log message="Order info ${header.id} event processed" loggingLevel="INFO"/>
+     	<log message="Order info provided" loggingLevel="INFO"/>
+    </route>
+    
+  </camelContext>
+
+</beans>

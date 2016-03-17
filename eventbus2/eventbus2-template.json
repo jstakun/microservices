@@ -18,7 +18,7 @@
     },
     {
       "name": "GIT_REPO",
-      "value": "https://github.com/jstakun/microservices/eventbus2.git",
+      "value": "https://github.com/jstakun/microservices/eventbus2",
       "required": true,
       "description": "Git repository, required"
     },

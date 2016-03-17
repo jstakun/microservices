@@ -8,7 +8,7 @@
       "iconClass": "icon-java"
     },
     "labels": {},
-    "name": "s2i-quickstart-cdi-camel-jetty"
+    "name": "eventbus2"
   },
   "parameters": [
     {
@@ -231,8 +231,7 @@
               {
                 "name": "AMQ_PASSWORD",
                 "value": "manager1"
-              },
-              
+              }            
             ]
           }
         },

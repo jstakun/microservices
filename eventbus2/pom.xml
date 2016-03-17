@@ -76,20 +76,19 @@
     </dependency>
     
     <!-- activemq -->
-   <dependency>
-      		<groupId>org.apache.activemq</groupId>
-      		<artifactId>activemq-camel</artifactId>
+    <dependency>
+      <groupId>org.apache.activemq</groupId>
+      <artifactId>activemq-camel</artifactId>
  	</dependency>
  	<dependency>
-    		<groupId>org.apache.activemq</groupId>
-    		<artifactId>activemq-pool</artifactId>
+      <groupId>org.apache.activemq</groupId>
+      <artifactId>activemq-pool</artifactId>
 	</dependency>	
 
     <!-- cdi api -->
     <dependency>
       <groupId>javax.enterprise</groupId>
       <artifactId>cdi-api</artifactId>
-      <version>1.2</version>
       <scope>provided</scope>
     </dependency>
 
@@ -242,6 +241,13 @@
           <mainClass>org.apache.camel.cdi.Main</mainClass>
         </configuration>
       </plugin>
+      
+        <plugin>
+			<groupId>org.eclipse.jetty</groupId>
+			<artifactId>jetty-maven-plugin</artifactId>
+			<version>9.2.15.v20160210</version>
+  	</plugin>
+      
 
     </plugins>
     <pluginManagement>

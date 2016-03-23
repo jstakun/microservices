@@ -8,12 +8,12 @@
       "iconClass": "icon-java"
     },
     "labels": {},
-    "name": "hello-service-camel-jetty"
+    "name": "s2i-quickstart-cdi-camel-jetty"
   },
   "parameters": [
     {
       "name": "APP_NAME",
-      "value": "hello-service-camel-jetty",
+      "value": "s2i-quickstart-cdi-camel-jetty",
       "description": "Application Name"
     },
     {

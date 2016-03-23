@@ -165,7 +165,7 @@
         <artifactId>fabric8-maven-plugin</artifactId>
         <version>${fabric8.version}</version>
         <executions>
-          <!--execution>
+          <execution>
             <id>json</id>
             <phase>generate-resources</phase>
             <goals>
@@ -178,7 +178,7 @@
             <goals>
               <goal>attach</goal>
             </goals>
-          </execution-->
+          </execution>
         </executions>
       </plugin>
 

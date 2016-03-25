@@ -29,6 +29,7 @@ public class ServiceProvider {
 	private static final Properties properties = new Properties();
 	private static final Map<String, String> routes = new HashMap<String, String>();
 	private static final Map<String, String> services = new HashMap<String, String>();
+	private static final Map<String, Integer> services_ports = new HashMap<String, Integer>();
 	private static boolean initialized = false;
 	
 	private static final ServiceProvider instance = new ServiceProvider();
@@ -113,9 +114,12 @@ public class ServiceProvider {
     			JSONArray items = root.optJSONArray("items");
     			if (items != null) {
     				for (int i = 0 ;i < items.length(); i++) {
-    					String host = items.getJSONObject(i).getJSONObject("spec").getString("clusterIP");
+    					JSONObject spec = items.getJSONObject(i).getJSONObject("spec");
+    					String host = spec.getString("clusterIP");
+    					Integer port = spec.getJSONArray("ports").getJSONObject(0).getInt("port");
     					String name = items.getJSONObject(i).getJSONObject("metadata").getString("name");
     					services.put(name, host);
+    					services_ports.put(name, port);
     					logger.log(Level.INFO, "Found service " + name + " at " + host);
     				} 
     				initialized = true;
@@ -189,25 +193,28 @@ public class ServiceProvider {
 		switch( service )
 		{
 			case Product:
-				uriBuilder.setHost( services.get("product") );
+				uriBuilder.setHost(services.get("product"));
+				uriBuilder.setPort(services_ports.get("product"));
 				break;
 	
 			case Sales:
 				uriBuilder.setHost( services.get("sales") );
+				uriBuilder.setPort(services_ports.get("sales"));
 				break;
 	
 			case Billing:
 				uriBuilder.setHost( services.get("billing") );
+				uriBuilder.setPort(services_ports.get("billing"));
 				break;
 	       
 			case EventBus:
 				uriBuilder.setHost( services.get("eventbus") );
+				uriBuilder.setPort(services_ports.get("eventbus"));
 				break;	
 				
 			default:
 				throw new IllegalStateException( "Unknown service" );
 		}
-		uriBuilder.setPort(Integer.valueOf(properties.getProperty("service_http_port", "8080")));
 		for( Object part : path )
 		{
 			stringWriter.append( '/' ).append( String.valueOf( part ) );

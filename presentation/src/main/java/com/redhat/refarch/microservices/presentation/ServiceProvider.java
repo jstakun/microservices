@@ -81,7 +81,7 @@ public class ServiceProvider {
 			HttpClient client = new DefaultHttpClient();
 			client.getConnectionManager().getSchemeRegistry().register(new Scheme("https", 8443, sf));
 	            
-            HttpGet get = new HttpGet( getOSEv3ApiUrl(properties.getProperty("project", "salesapp"), ServiceProvider.ApiEndpoint.Routes).build() );
+            HttpGet get = new HttpGet( getOSEv3ApiUrl(properties.getProperty("project", "microservices"), ServiceProvider.ApiEndpoint.Routes).build() );
     		get.addHeader("Authorization", "Bearer " + getToken()); 
     		logger.log(Level.INFO, "Executing " + get );
     		HttpResponse response = client.execute( get );
@@ -104,7 +104,7 @@ public class ServiceProvider {
     			logger.log(Level.INFO, "Received following response: " + responseString); 
     		}
     		
-    		HttpGet get2 = new HttpGet( getOSEv3ApiUrl(properties.getProperty("project", "salesapp"), ServiceProvider.ApiEndpoint.Services).build() );
+    		HttpGet get2 = new HttpGet( getOSEv3ApiUrl(properties.getProperty("project", "microservices"), ServiceProvider.ApiEndpoint.Services).build() );
     		get2.addHeader("Authorization", "Bearer " + getToken()); 
     		logger.log(Level.INFO, "Executing " + get2 );
     		HttpResponse response2 = client.execute( get2 );

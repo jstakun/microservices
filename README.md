@@ -3,7 +3,7 @@
 
 ---
 
-* You might want to modify settings.xml and/or assemble script in each project to reflect your environment. Actually settings.xml uses local nexus repo, and settings_remote.xml is example of using remote repos.
+* You might want to modify settings.xml and/or assemble script in each project to reflect your environment. Actually settings.xml uses remote repos, and settings_local.xml is example of using local repo.
 
 * oc new-project microservices --display-name='Microservices application' --description='Web sales application based on microservices architecture'
 

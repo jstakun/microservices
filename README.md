@@ -51,7 +51,7 @@ create Product, Keyword and PRODUCT_KEYWORD tables and insert respective records
 
 * This is optional:
 
-oc edit dc product -o json
+oc edit dc product -o json and add
 
 ```javascript
 "strategy": {
@@ -92,7 +92,7 @@ create Customer, Orders and OrderItem tables using https://raw.githubusercontent
 
 * This is optional: 
 
-oc edit dc sales -o json
+oc edit dc sales -o json and add
 
 ```javascript
 "livenessProbe": {

@@ -36,7 +36,7 @@ create pvol.json
     "persistentVolumeReclaimPolicy": "Recycle"
   }
 }
-'''
+```
 
 oc create -f pvol.json
 
@@ -75,7 +75,7 @@ oc edit dc product -o json
             "initialDelaySeconds": 120,
             "timeoutSeconds": 10
 },
-'''
+```
 
 * This is optional: 
 
@@ -104,7 +104,7 @@ oc edit dc sales -o json
         "initialDelaySeconds": 120,
         "timeoutSeconds": 10
 },
-'''
+```
 
 * This is optional: 
 

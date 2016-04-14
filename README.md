@@ -3,7 +3,7 @@
 
 ---
 
-* You might want to modify settings.xml and/or assemble script in each project to reflect your environment
+* You might want to modify settings.xml and/or assemble script in each project to reflect your environment. Actually settings.xml uses local nexus repo, and settings_remote.xml is example of using remote repos.
 
 * oc new-project microservices --display-name='Microservices application' --description='Web sales application based on microservices architecture'
 
@@ -17,6 +17,7 @@
 
 create pvol.json
 
+```javascript
 {
   "apiVersion": "v1",
   "kind": "PersistentVolume",
@@ -35,6 +36,7 @@ create pvol.json
     "persistentVolumeReclaimPolicy": "Recycle"
   }
 }
+'''
 
 oc create -f pvol.json
 
@@ -51,6 +53,7 @@ create Product, Keyword and PRODUCT_KEYWORD tables and insert respective records
 
 oc edit dc product -o json
 
+```javascript
 "strategy": {
             "type": "Rolling",
             "rollingParams": {
@@ -72,6 +75,7 @@ oc edit dc product -o json
             "initialDelaySeconds": 120,
             "timeoutSeconds": 10
 },
+'''
 
 * This is optional: 
 
@@ -90,6 +94,7 @@ create Customer, Orders and OrderItem tables using https://raw.githubusercontent
 
 oc edit dc sales -o json
 
+```javascript
 "livenessProbe": {
         "httpGet": {
                   "path": "/_status/dbhealthz",
@@ -99,6 +104,7 @@ oc edit dc sales -o json
         "initialDelaySeconds": 120,
         "timeoutSeconds": 10
 },
+'''
 
 * This is optional: 
 
@@ -134,6 +140,7 @@ You could create auto scaler for shop pod
 
 create scaler.yaml
 
+```
 apiVersion: extensions/v1beta1
 kind: HorizontalPodAutoscaler
 metadata:
@@ -148,6 +155,7 @@ spec:
   maxReplicas: 2
   cpuUtilization:
     targetPercentage: 80 
+```
 
 oc create -f scaler.yaml
 

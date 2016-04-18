@@ -24,6 +24,8 @@ public class BillingService
 	private Logger logger = Logger.getLogger( getClass().getName() );
 
 	private static final Random random = new Random();
+	
+	private static final String VERSION = "1.0.2";
 
 	@POST
 	@Path("/process")
@@ -65,7 +67,7 @@ public class BillingService
 	@Path("/info")
 	@Produces({"application/xml"})
 	public Response info() {
-		return Response.status(200).entity("<info><name>Billing service</name><version>1.0.2</version></info>").build();
+		return Response.status(200).entity("<info><name>Billing service</name><version>" + VERSION + "</version></info>").build();
 	}
 
 	private void logInfo(String message)

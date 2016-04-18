@@ -42,6 +42,8 @@ public class SalesService
 {
 
 	private Logger logger = Logger.getLogger( getClass().getName() );
+	
+	private static final String VERSION = "1.0.0";
 
 	@PersistenceContext
 	private EntityManager em;
@@ -465,7 +467,7 @@ public class SalesService
 	@Path("/info")
 	@Produces({"application/xml"})
 	public Response info() {
-		return Response.status(200).entity("<info><name>Sales service</name><version>1.0.0</version></info>").build();
+		return Response.status(200).entity("<info><name>Sales service</name><version>" + VERSION + "</version></info>").build();
 	}
 	
 	@GET

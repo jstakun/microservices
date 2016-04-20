@@ -1,5 +1,6 @@
 package com.redhat.refarch.microservices.billing.service;
 
+import java.net.InetAddress;
 import java.util.Calendar;
 import java.util.Random;
 import java.util.logging.Level;
@@ -25,7 +26,7 @@ public class BillingService
 
 	private static final Random random = new Random();
 	
-	private static final String VERSION = "1.0.2";
+	private static final String VERSION = "1.0.3";
 
 	@POST
 	@Path("/process")
@@ -67,7 +68,14 @@ public class BillingService
 	@Path("/info")
 	@Produces({"application/xml"})
 	public Response info() {
-		return Response.status(200).entity("<info><name>Billing service</name><version>" + VERSION + "</version></info>").build();
+		String addr = "127.0.0.1";
+		try {
+			InetAddress ip = InetAddress.getLocalHost();
+			addr = ip.getHostAddress();	  
+		} catch (Exception e) {
+			
+		}
+		return Response.status(200).entity("<info><name>Billing service</name><version>" + VERSION + "</version><ip>" + addr + "</ip></info>").build();
 	}
 
 	private void logInfo(String message)

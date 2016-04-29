@@ -483,6 +483,9 @@ public class SalesService
 				count = 0;
 			}
 			logger.log(Level.INFO, "Checked database status with response: " + count);
+		} catch (NoResultException e) {
+			count = 0;
+			logger.log(Level.INFO, "Checked database status with response: " + count);
 		} catch (Exception e) {
 			count = -1;
 			logger.log(Level.SEVERE, e.getMessage(), e);

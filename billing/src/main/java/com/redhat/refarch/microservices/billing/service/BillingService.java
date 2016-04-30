@@ -79,7 +79,6 @@ public class BillingService
 	}
 	
 	@GET
-	@Path("/")
 	@Produces({"application/xml"})
 	public Response root() {
 	    return info();

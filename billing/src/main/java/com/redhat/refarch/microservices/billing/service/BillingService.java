@@ -77,9 +77,16 @@ public class BillingService
 		}
 		return Response.status(200).entity("<info><name>Billing service</name><version>" + VERSION + "</version><ip>" + addr + "</ip></info>").build();
 	}
+	
+	@GET
+	@Path("/")
+	@Produces({"application/xml"})
+	public Response root() {
+	    return info();
+	}
 
 	private void logInfo(String message)
 	{
-		logger.log( Level.INFO, message );
+		logger.log(Level.INFO, message);
 	}
 }

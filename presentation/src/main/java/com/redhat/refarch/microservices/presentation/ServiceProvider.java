@@ -62,6 +62,7 @@ public class ServiceProvider {
     			logger.log(Level.INFO, "Creating route " + name);
     			routes.put(name, "localhost");
     			services.put(name, "127.0.0.1");
+    			services_ports.put(name, 80);
     		}
 		} catch (Exception ex) {
 			logger.log(Level.SEVERE, ex.getMessage(), ex);

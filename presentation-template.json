@@ -96,7 +96,7 @@
             "name": "API_TOKEN",
             "value": "",
             "required": true
-        }, 
+        }
     ],
     "objects": [
         {

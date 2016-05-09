@@ -615,9 +615,9 @@
                                         "value": "${JGROUPS_CLUSTER_PASSWORD}"
                                     },
                                     {
-					"name": "JAVA_OPTS",
+										"name": "JAVA_OPTS",
                                         "value": "-Xmx512m -Djava.net.preferIPv4Stack=true -Djboss.modules.system.pkgs=org.jboss.logmanager -Djava.awt.headless=true -Djboss.modules.policy-permissions=true" 
-                                    }, 
+                                    } 
                                 ]
                             }
                         ],

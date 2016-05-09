@@ -80,9 +80,9 @@ public class ServiceProvider {
 	        }, SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
 	        
 			HttpClient client = new DefaultHttpClient();
-			client.getConnectionManager().getSchemeRegistry().register(new Scheme("https", 8443, sf));
+			client.getConnectionManager().getSchemeRegistry().register(new Scheme("https", getHttpsPort(), sf));
 	            
-            HttpGet get = new HttpGet( getOSEv3ApiUrl(properties.getProperty("project", "microservices"), ServiceProvider.ApiEndpoint.Routes).build() );
+            HttpGet get = new HttpGet( getOSEv3ApiUrl(getNamespace(), ServiceProvider.ApiEndpoint.Routes).build() );
     		get.addHeader("Authorization", "Bearer " + getToken()); 
     		logger.log(Level.INFO, "Executing " + get );
     		HttpResponse response = client.execute( get );
@@ -105,7 +105,7 @@ public class ServiceProvider {
     			logger.log(Level.INFO, "Received following response: " + responseString); 
     		}
     		
-    		HttpGet get2 = new HttpGet( getOSEv3ApiUrl(properties.getProperty("project", "microservices"), ServiceProvider.ApiEndpoint.Services).build() );
+    		HttpGet get2 = new HttpGet( getOSEv3ApiUrl(getNamespace(), ServiceProvider.ApiEndpoint.Services).build() );
     		get2.addHeader("Authorization", "Bearer " + getToken()); 
     		logger.log(Level.INFO, "Executing " + get2 );
     		HttpResponse response2 = client.execute( get2 );
@@ -151,7 +151,7 @@ public class ServiceProvider {
 		return getServiceUriBuilder(service, path);
 	}
 	
-	private URIBuilder getRouteUriBuilder(Service service, Object... path)
+	/*private URIBuilder getRouteUriBuilder(Service service, Object... path)
 	{
 		URIBuilder uriBuilder = new URIBuilder();
 		uriBuilder.setScheme( "http" );
@@ -184,7 +184,7 @@ public class ServiceProvider {
 		}
 		uriBuilder.setPath( stringWriter.toString() );
 		return uriBuilder;
-	};
+	}*/
 	
 	private URIBuilder getServiceUriBuilder(Service service, Object... path)
 	{
@@ -228,8 +228,8 @@ public class ServiceProvider {
 	private static URIBuilder getOSEv3ApiUrl(String namespace, ApiEndpoint apiEndpoint) {
 		URIBuilder uriBuilder = new URIBuilder();
 		uriBuilder.setScheme("https");
-		uriBuilder.setHost(properties.getProperty("host"));
-		uriBuilder.setPort(Integer.valueOf(properties.getProperty("https_port", "443")));
+		uriBuilder.setHost(getHost());
+		uriBuilder.setPort(getHttpsPort());
 		switch (apiEndpoint) {
 			case Pods:
 				uriBuilder.setPath("/api/v1/namespaces/" + namespace + "/pods");
@@ -255,5 +255,43 @@ public class ServiceProvider {
 			logger.log(Level.INFO, "Reading token from environment variable");
 		}
 		return token;
+	}
+	
+	private static String getHost() {
+		String host = System.getenv("KUBERNETES_SERVICE_HOST");
+		if (host == null || host.length() == 0) {
+			logger.log(Level.INFO, "Reading host from config file");
+		    host = properties.getProperty("host"); 
+		} else {
+			logger.log(Level.INFO, "Reading host from environment variable");
+		}
+		return host;
+	}
+	
+	private static int getHttpsPort() {
+		String port = System.getenv("KUBERNETES_SERVICE_PORT");
+		if (port == null || port.length() == 0) {
+			logger.log(Level.INFO, "Reading port from config file");
+		    port = properties.getProperty("host"); 
+		} else {
+			logger.log(Level.INFO, "Reading port from environment variable");
+		}
+		
+		try {
+			return Integer.valueOf(port).intValue();
+		} catch (Exception e) {
+			return 443;
+		}
+	}
+	
+	private static String getNamespace() {
+		String namespace = System.getenv("OPENSHIFT_BUILD_NAMESPACE");
+		if (namespace == null || namespace.length() == 0) {
+			logger.log(Level.INFO, "Reading namespace from config file");
+		    namespace = properties.getProperty("project"); 
+		} else {
+			logger.log(Level.INFO, "Reading namespace from environment variable");
+		}
+		return namespace;
 	}
 }

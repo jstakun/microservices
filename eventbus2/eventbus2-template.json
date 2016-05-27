@@ -75,7 +75,7 @@
     },
     {
       "name": "AMQ_HOST",
-      "value": "",
+      "value": "0.0.0.0",
       "required": true
     },
     {

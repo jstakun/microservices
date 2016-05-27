@@ -216,8 +216,7 @@
             },
             "spec": {
                 "strategy": {
-                    {
-            	        "type": "Rolling",
+                        "type": "Rolling",
             	        "rollingParams": {
                             "updatePeriodSeconds": 1,
                             "intervalSeconds": 1,
@@ -226,8 +225,7 @@
                             "maxSurge": "25%"
                         },
                         "resources": {}
-		    },
-                },
+		        },
                 "triggers": [
                     {
                         "type": "ImageChange",

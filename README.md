@@ -1,11 +1,15 @@
 
-## OSE 3.1 setup 
-
----
+## OSE 3.x setup
 
 * You might want to modify settings.xml and/or assemble script in each project to reflect your environment. Actually settings.xml uses remote repos, and settings_local.xml is example of using local repo.
 
-* oc new-project microservices --display-name='Microservices application' --description='Web sales application based on microservices architecture'
+* oadm new-project microservices --display-name='Microservices application' --description='Web shop application based on microservices architecture' --node-selector='region=primary'
+
+* oc project microservices
+
+* This is optional: 
+
+oc policy add-role-to-user edit demouser -n $(oc project -q)
 
 * oc create -f https://raw.githubusercontent.com/jboss-openshift/application-templates/master/secrets/eap-app-secret.json
 
@@ -17,8 +21,7 @@
 
 create pvol.json
 
-```javascript
-{
+```{
   "apiVersion": "v1",
   "kind": "PersistentVolume",
   "metadata": {
@@ -35,104 +38,49 @@ create pvol.json
     },
     "persistentVolumeReclaimPolicy": "Recycle"
   }
-}
-```
+}```
 
-oc create -f pvol.json
+* oc create -f https://raw.githubusercontent.com/jstakun/microservices/master/product-template.json
 
-* oc new-app eap64-mysql-persistent-s2i \
-    -p APPLICATION_NAME=product,SOURCE_REPOSITORY_URL=https://github.com/jstakun/microservices,SOURCE_REPOSITORY_REF=master,CONTEXT_DIR=product,DB_JNDI=java:jboss/datasources/ProductDS,DB_DATABASE=product,VOLUME_CAPACITY=128Mi,HTTPS_NAME=jboss,HTTPS_PASSWORD=mykeystorepass
+* oc new-app product-template
 
-* oc rsh --shell '/bin/bash' product-mysql-1-qm0jw
+* oc rsh --shell '/bin/bash' product-mysql-1-tptj5
 
-mysql -u root -D product
+* mysql -u root -D product
 
-create Product, Keyword and PRODUCT_KEYWORD tables and insert respective records using https://raw.githubusercontent.com/jstakun/microservices/master/setup_microservices.sql
+* create Product, Keyword and PRODUCT_KEYWORD tables and insert respective records using https://raw.githubusercontent.com/jstakun/microservices/master/setup_microservices.sql
 
-* This is optional:
+* oc create -f https://raw.githubusercontent.com/jstakun/microservices/master/sales-template.json
 
-oc edit dc product -o json and add
+* oc new-app sales-template
 
-```javascript
-"strategy": {
-            "type": "Rolling",
-            "rollingParams": {
-                "updatePeriodSeconds": 1,
-                "intervalSeconds": 1,
-                "timeoutSeconds": 600,
-                "maxUnavailable": "25%",
-                "maxSurge": "25%"
-            },
-            "resources": {}
-},
+* oc rsh --shell '/bin/bash' sales-mysql-1-nceeh
 
-"livenessProbe": {
-            "httpGet": {
-                 "path": "/_status/dbhealthz",
-                 "port": 8080,
-                 "scheme": "HTTP"
-            },
-            "initialDelaySeconds": 120,
-            "timeoutSeconds": 10
-},
-```
+* mysql -u root -D sales
 
-* This is optional: 
+* create Customer, Orders and OrderItem tables using https://raw.githubusercontent.com/jstakun/microservices/master/setup_microservices.sql
 
-oc env dc product "JAVA_OPTS=-Xmx512m -XX:MaxPermSize=256m -Djava.net.preferIPv4Stack=true -Djboss.modules.system.pkgs=org.jboss.logmanager -Djava.awt.headless=true -Djboss.modules.policy-permissions=true"
+* oc create -f https://raw.githubusercontent.com/jstakun/microservices/master/billing-template.json
 
-* oc new-app eap64-mysql-persistent-s2i \
-    -p APPLICATION_NAME=sales,SOURCE_REPOSITORY_URL=https://github.com/jstakun/microservices,SOURCE_REPOSITORY_REF=master,CONTEXT_DIR=sales,DB_JNDI=java:jboss/datasources/SalesDS,DB_DATABASE=sales,VOLUME_CAPACITY=128Mi,HTTPS_NAME=jboss,HTTPS_PASSWORD=mykeystorepass
-
-* oc rsh --shell '/bin/bash' sales-mysql-1-qm0jw
-
-mysql -u root -D sales
-
-create Customer, Orders and OrderItem tables using https://raw.githubusercontent.com/jstakun/microservices/master/setup_microservices.sql
-
-* This is optional: 
-
-oc edit dc sales -o json and add
-
-```javascript
-"livenessProbe": {
-        "httpGet": {
-                  "path": "/_status/dbhealthz",
-                  "port": 8080,
-                  "scheme": "HTTP"
-        },
-        "initialDelaySeconds": 120,
-        "timeoutSeconds": 10
-},
-```
-
-* This is optional: 
-
-oc env dc sales "JAVA_OPTS=-Xmx512m -XX:MaxPermSize=256m -Djava.net.preferIPv4Stack=true -Djboss.modules.system.pkgs=org.jboss.logmanager -Djava.awt.headless=true -Djboss.modules.policy-permissions=true"
-
-* oc new-app eap64-basic-s2i \
-    -p APPLICATION_NAME=billing,SOURCE_REPOSITORY_URL=https://github.com/jstakun/microservices,SOURCE_REPOSITORY_REF=master,CONTEXT_DIR=billing
-
-* This is optional:
-
-oc env dc billing "JAVA_OPTS=-Xmx512m -XX:MaxPermSize=256m -Djava.net.preferIPv4Stack=true -Djboss.modules.system.pkgs=org.jboss.logmanager -Djava.awt.headless=true -Djboss.modules.policy-permissions=true"
-
-* oc new-app eap64-basic-s2i \
-    -p APPLICATION_NAME=shop,SOURCE_REPOSITORY_URL=https://github.com/jstakun/microservices,SOURCE_REPOSITORY_REF=master,CONTEXT_DIR=presentation
-
-* oc env dc shop API_TOKEN=$(oc whoami -t) JAVA_OPTS="-Xmx512m -XX:MaxPermSize=256m -Djava.net.preferIPv4Stack=true -Djboss.modules.system.pkgs=org.jboss.logmanager -Djava.awt.headless=true -Djboss.modules.policy-permissions=true"
+* oc new-app billing-template
 
 * oc create -f https://raw.githubusercontent.com/jboss-openshift/application-templates/master/secrets/amq-app-secret.json
 
 * oc new-app amq62-persistent -p VOLUME_CAPACITY=128Mi,MQ_USERNAME=admin,MQ_PASSWORD=manager1,MQ_QUEUES=transactions,products,customers,orders  
 
-* oc create -f https://raw.githubusercontent.com/jstakun/eventbus2/master/eventbus2-template.json
+* oc create -f https://raw.githubusercontent.com/jstakun/microservices/master/eventbus2/eventbus2-template.json
 
-* oc new-app eventbus2 -p GIT_REPO=https://github.com/jstakun/eventbus2
+* oc new-app eventbus2 -p GIT_REPO=https://github.com/jstakun/eventbus2,AMQ_HOST=172.30.248.83
 
-* AMQ_HOST should point to broker-amq-tcp service IP address
+* oc create -f https://raw.githubusercontent.com/jstakun/microservices/master/presentation-template.json
 
-oc env dc eventbus2 AMQ_HOST=172.30.20.199
+* #get default token
+
+oc get -n microservices sa/default --template='{{range .secrets}}{{printf "%s\n" .name}}{{end}}'
+
+* #use default token name from below  
+
+oc new-app presentation-template -p API_TOKEN=$(oc get -n microservices secrets default-token-xqxmg --template='{{.data.token}}' | base64 -d)
 
 * This is optional:
 

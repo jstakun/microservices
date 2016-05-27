@@ -39,10 +39,13 @@ public class MyJettyRoute extends RouteBuilder {
     @Override
     public void configure() throws Exception {
         
-    	String host = System.getenv("AMQ_HOST");
+    	String host = System.getenv("BROKER_AMQ_TCP_SERVICE_HOST");
     	if (host == null) {
-    		host = "0.0.0.0";
-    	}
+    		host = System.getenv("AMQ_HOST");
+    		if (host == null) {
+    			host = "0.0.0.0";
+    		}
+    	}	
     	String port = System.getenv("AMQ_PORT");
     	if (port == null) {
     		port = "61616";

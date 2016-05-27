@@ -66,11 +66,11 @@ create pvol.json
 
 * oc create -f https://raw.githubusercontent.com/jboss-openshift/application-templates/master/secrets/amq-app-secret.json
 
-* oc new-app amq62-persistent -p VOLUME_CAPACITY=128Mi,MQ_USERNAME=admin,MQ_PASSWORD=manager1,MQ_QUEUES=transactions,products,customers,orders  
+* oc new-app amq62-persistent -p VOLUME_CAPACITY=128Mi,MQ_USERNAME=admin,MQ_PASSWORD=manager1 
 
 * oc create -f https://raw.githubusercontent.com/jstakun/microservices/master/eventbus2/eventbus2-template.json
 
-* oc new-app eventbus2 -p GIT_REPO=https://github.com/jstakun/eventbus2,AMQ_HOST=172.30.248.83
+* oc new-app eventbus2
 
 * oc create -f https://raw.githubusercontent.com/jstakun/microservices/master/presentation-template.json
 

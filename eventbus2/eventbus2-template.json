@@ -19,6 +19,7 @@
     {
       "name": "GIT_REPO",
       "required": true,
+      "value": "https://github.com/jstakun/microservices",
       "description": "Git repository, required"
     },
     {

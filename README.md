@@ -62,6 +62,8 @@ create pvol.json
 
 * oc create -f https://raw.githubusercontent.com/jstakun/microservices/master/billing-template.json
 
+* you might need to install eap 7 image stream from here: https://raw.githubusercontent.com/jboss-openshift/application-templates/1.3.0/jboss-image-streams.json
+
 * oc new-app billing-template
 
 * oc create -f https://raw.githubusercontent.com/jboss-openshift/application-templates/master/secrets/amq-app-secret.json

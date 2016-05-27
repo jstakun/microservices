@@ -253,6 +253,7 @@ public class ServiceProvider {
 		String token = null;
 		try {
 			token = new String(Files.readAllBytes(Paths.get("/var/run/secrets/kubernetes.io/serviceaccount/token")));
+			logger.log(Level.INFO, "Reading token from secret");
 		} catch (IOException e) {
 			logger.log(Level.SEVERE, "getToken() exception:", e);
 		}
@@ -260,7 +261,7 @@ public class ServiceProvider {
 		if (token == null || token.length() == 0) {
 			token = System.getenv("API_TOKEN");
 			if (token == null || token.length() == 0) {
-				logger.log(Level.INFO, "Reading token from config file");
+				logger.log(Level.INFO, "Reading token from properties file");
 				token = properties.getProperty("token"); 
 			} else {
 				logger.log(Level.INFO, "Reading token from environment variable");

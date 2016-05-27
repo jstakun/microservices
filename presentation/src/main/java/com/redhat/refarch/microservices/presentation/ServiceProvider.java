@@ -254,7 +254,7 @@ public class ServiceProvider {
 		try {
 			token = new String(Files.readAllBytes(Paths.get("/var/run/secrets/kubernetes.io/serviceaccount/token")));
 		} catch (IOException e) {
-			logger.log(Level.SEVERE, e.getMessage(), e);
+			logger.log(Level.SEVERE, "getToken() exception:", e);
 		}
 		
 		if (token == null || token.length() == 0) {

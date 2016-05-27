@@ -76,13 +76,7 @@ create pvol.json
 
 * oc create -f https://raw.githubusercontent.com/jstakun/microservices/master/presentation-template.json
 
-* get default token
-
-oc get -n microservices sa/default --template='{{range .secrets}}{{printf "%s\n" .name}}{{end}}'
-
-* use default token name
-
-oc new-app presentation-template -p API_TOKEN=$(oc get -n microservices secrets default-token-xqxmg --template='{{.data.token}}' | base64 -d)
+* oc new-app presentation-template
 
 * This is optional:
 

@@ -1,7 +1,10 @@
 package com.redhat.refarch.microservices.presentation;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.util.HashMap;
@@ -247,12 +250,21 @@ public class ServiceProvider {
 	}
 	
 	private static String getToken() {
-		String token = System.getenv("API_TOKEN");
+		String token = null;
+		try {
+			token = new String(Files.readAllBytes(Paths.get("/var/run/secrets/kubernetes.io/serviceaccount/token")));
+		} catch (IOException e) {
+			logger.log(Level.SEVERE, e.getMessage(), e);
+		}
+		
 		if (token == null || token.length() == 0) {
-			logger.log(Level.INFO, "Reading token from config file");
-		    token = properties.getProperty("token"); 
-		} else {
-			logger.log(Level.INFO, "Reading token from environment variable");
+			token = System.getenv("API_TOKEN");
+			if (token == null || token.length() == 0) {
+				logger.log(Level.INFO, "Reading token from config file");
+				token = properties.getProperty("token"); 
+			} else {
+				logger.log(Level.INFO, "Reading token from environment variable");
+			}
 		}
 		return token;
 	}

@@ -264,14 +264,14 @@
                                 "image": "${APPLICATION_NAME}",
                                 "imagePullPolicy": "Always",
                                 "livenessProbe": {
-                                    "exec": {
-                                        "command": [
-                                            "/bin/bash",
-                                            "-c",
-                                            "/opt/eap/bin/livenessProbe.sh"
-                                        ]
-                                    }
-                                },
+            						"httpGet": {
+                 						"path": "/_status/dbhealthz",
+                 						"port": 8080,
+                 						"scheme": "HTTP"
+            						},
+            						"initialDelaySeconds": 120,
+            						"timeoutSeconds": 10
+								},
                                 "readinessProbe": {
                                     "exec": {
                                         "command": [

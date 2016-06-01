@@ -21,7 +21,8 @@ oc policy add-role-to-user edit demouser -n $(oc project -q)
 
 create pvol.json
 
-```{
+```
+{
   "apiVersion": "v1",
   "kind": "PersistentVolume",
   "metadata": {
@@ -38,7 +39,8 @@ create pvol.json
     },
     "persistentVolumeReclaimPolicy": "Recycle"
   }
-}```
+}
+```
 
 * oc create -f https://raw.githubusercontent.com/jstakun/microservices/master/product-template.json
 

@@ -258,9 +258,9 @@ public class ServiceProvider {
 			logger.log(Level.SEVERE, "getToken() exception:", e);
 		}
 		
-		if (token == null || token.length() == 0) {
+		if (StringUtils.isEmpty(token)) {
 			token = System.getenv("API_TOKEN");
-			if (token == null || token.length() == 0) {
+			if (StringUtils.isEmpty(token)) {
 				logger.log(Level.INFO, "Reading token from properties file");
 				token = properties.getProperty("token"); 
 			} else {
@@ -272,7 +272,7 @@ public class ServiceProvider {
 	
 	private static String getHost() {
 		String host = System.getenv("KUBERNETES_SERVICE_HOST");
-		if (host == null || host.length() == 0) {
+		if (StringUtils.isEmpty(host)) {
 			logger.log(Level.INFO, "Reading host from config file");
 		    host = properties.getProperty("host"); 
 		} else {
@@ -283,9 +283,9 @@ public class ServiceProvider {
 	
 	private static int getHttpsPort() {
 		String port = System.getenv("KUBERNETES_SERVICE_PORT");
-		if (port == null || port.length() == 0) {
+		if (StringUtils.isEmpty(port)) {
 			logger.log(Level.INFO, "Reading port from config file");
-		    port = properties.getProperty("host"); 
+		    port = properties.getProperty("host", "443"); 
 		} else {
 			logger.log(Level.INFO, "Reading port from environment variable");
 		}
@@ -299,7 +299,7 @@ public class ServiceProvider {
 	
 	private static String getNamespace() {
 		String namespace = System.getenv("OPENSHIFT_BUILD_NAMESPACE");
-		if (namespace == null || namespace.length() == 0) {
+		if (StringUtils.isEmpty(namespace)) {
 			logger.log(Level.INFO, "Reading namespace from config file");
 		    namespace = properties.getProperty("project"); 
 		} else {

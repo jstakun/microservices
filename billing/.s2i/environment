@@ -1,1 +1,3 @@
-#MAVEN_ARGS="-X -s maven/settings.xml -Popenshift -DskipTests -Dcom.redhat.xpaas.repo.redhatga package"
+#MAVEN_ARGS="-X -s configuration/settings.xml -Popenshift -DskipTests -Dcom.redhat.xpaas.repo.redhatga package"
+MAVEN_ARGS_APPEND=" -s configuration/settings.xml"
+

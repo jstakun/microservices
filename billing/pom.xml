@@ -8,33 +8,7 @@
 	<version>1.0</version>
 	<packaging>war</packaging>
 
-    <!--repositories>
-        <repository>
-            <id>jboss-enterprise-maven-repository</id>
-            <url>https://maven.repository.redhat.com/ga/</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
-    </repositories>
-
-    <pluginRepositories>
-        <pluginRepository>
-            <id>jboss-enterprise-maven-repository</id>
-            <url>https://maven.repository.redhat.com/ga/</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </pluginRepository>
-    </pluginRepositories-->
-
-	<properties>
+    <properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
 		<!-- JBoss dependency versions -->

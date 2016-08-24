@@ -95,7 +95,7 @@
             "description": "API token",
             "name": "API_TOKEN",
             "value": "",
-            "required": true
+            "required": false
         }
     ],
     "objects": [

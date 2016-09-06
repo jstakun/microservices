@@ -1,4 +1,4 @@
-#MAVEN_ARGS=-X -e -Popenshift -DskipTests -Dcom.redhat.xpaas.repo.redhatga clean package -Djava.net.preferIPv4Stack=true
+#MAVEN_ARGS=-X -e -Popenshift -Dcom.redhat.xpaas.repo.redhatga clean package -Djava.net.preferIPv4Stack=true
 #MAVEN_ARGS=-X -e -s maven/settings.xml -Popenshift -DskipTests -Dcom.redhat.xpaas.repo.redhatga package -Djava.net.preferIPv4Stack=true
 MAVEN_ARGS_APPEND=-s maven/settings.xml
 #MAVEN_MIRROR_URL=http://172.30.131.16:8081/nexus/content/groups/public

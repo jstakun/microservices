@@ -87,5 +87,14 @@
   <activeProfiles>
     <activeProfile>fusesource.repo</activeProfile>
   </activeProfiles>
+  
+  <servers>
+    		<server>
+      			<id>deployment</id>
+      			<username>admin</username>
+      			<password>admin123</password>
+     		</server>
+  	</servers>
+  
 
 </settings>

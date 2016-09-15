@@ -28,6 +28,18 @@
 		<maven.compiler.source>1.8</maven.compiler.source>
 	</properties>
 
+    <distributionManagement>
+    	<repository>
+      		<id>deployment</id>
+      		<name>Internal Releases</name>
+      		<url>${env.nexus_url}/nexus/content/repositories/releases/</url>
+    	</repository>
+    	<snapshotRepository>
+      		<id>deployment</id>
+      		<name>Internal Releases</name>
+      		<url>${env.nexus_url}/nexus/content/repositories/snapshots/</url>
+    	</snapshotRepository>
+    </distributionManagement>
 
 	<dependencyManagement>
 		<dependencies>

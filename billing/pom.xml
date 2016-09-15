@@ -11,12 +11,14 @@
     <properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
+        <nexus.url>http://nexus.cloudapps.ocpcloud.com/</nexus.url>
 		<!-- JBoss dependency versions -->
 		<version.wildfly.maven.plugin>1.0.2.Final</version.wildfly.maven.plugin>
 
 		<!-- Define the version of the JBoss BOMs we want to import to specify 
 			tested stacks. -->
 		<version.jboss.bom.eap>7.0.0.GA</version.jboss.bom.eap>
+		
 
 		<!-- other plugin versions -->
 		<version.compiler.plugin>3.1</version.compiler.plugin>
@@ -32,12 +34,12 @@
     	<repository>
       		<id>deployment</id>
       		<name>Internal Releases</name>
-      		<url>${env.nexus_url}/nexus/content/repositories/releases/</url>
+      		<url>${nexus.url}/nexus/content/repositories/releases/</url>
     	</repository>
     	<snapshotRepository>
       		<id>deployment</id>
       		<name>Internal Releases</name>
-      		<url>${env.nexus_url}/nexus/content/repositories/snapshots/</url>
+      		<url>${nexus.url}/nexus/content/repositories/snapshots/</url>
     	</snapshotRepository>
     </distributionManagement>
 

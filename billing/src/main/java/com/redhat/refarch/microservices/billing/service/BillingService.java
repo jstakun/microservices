@@ -27,7 +27,7 @@ public class BillingService
 
 	private static final Random random = new Random();
 	
-	private static final String VERSION = "1.0.3b34";
+	private static final String VERSION = "1.0.3b35";
 
 	@POST
 	@Path("/process")

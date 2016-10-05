@@ -74,7 +74,7 @@ public class BillingService
 			addr = InetAddress.getLocalHost().getHostAddress();
 		} catch (UnknownHostException e) {
 			logger.log(Level.SEVERE, e.getMessage(), e);
-			addr = "127.0.0.1";
+			addr = "unknown";
 		}
 			  	
 		return Response.status(200).entity("<info><name>Billing service</name><version>" + VERSION + "</version><ip>" + addr + "</ip></info>").build();

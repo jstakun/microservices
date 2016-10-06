@@ -92,6 +92,14 @@
 		<finalName>${project.artifactId}</finalName>
 		<plugins>
 			<plugin>
+    			<artifactId>maven-compiler-plugin</artifactId>
+    			<configuration>
+       				<source>1.8</source>
+       				<target>1.8</target>
+       				<skip>true</skip>
+    			</configuration>
+			</plugin>
+			<plugin>
 				<artifactId>maven-war-plugin</artifactId>
 				<version>${version.war.plugin}</version>
 				<configuration>

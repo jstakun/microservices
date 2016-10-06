@@ -63,7 +63,7 @@
 		<tr>
 			<td style="padding: 5px;">Credit Card No:</td>
 			<td style="padding: 5px;"><input type="text" name="creditCardNo"
-				size="18" maxlength="16" pattern="\d{16}" required></td>
+				size="18" maxlength="16" pattern="\d{16}" value="1234567890123456" required></td>
 		</tr>
 		<tr>
 			<td style="padding: 5px;">Expiration Date</td>
@@ -94,7 +94,7 @@
 			<td style="padding: 5px;">Verification Code</td>
 			<td style="padding: 5px;"><input type="text"
 				name="verificationCode" max="999" size="4" maxlength="3"
-				pattern="\d{3}" required></td>
+				pattern="\d{3}" value="123" required></td>
 		</tr>
 	</table>
 

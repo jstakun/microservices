@@ -273,14 +273,17 @@
                                     }
                                 },
                                 "readinessProbe": {
-                                    "exec": {
-                                        "command": [
-                                            "/bin/bash",
-                                            "-c",
-                                            "/opt/eap/bin/readinessProbe.sh"
-                                        ]
-                                    }
-                                },
+                            		"httpGet": {
+                                		"path": "/info",
+                                		"port": 8080,
+                                		"scheme": "HTTP"
+                            		},
+                            		"initialDelaySeconds": 30,
+                            		"timeoutSeconds": 10,
+                            		"periodSeconds": 10,
+                            		"successThreshold": 1,
+                            		"failureThreshold": 3
+                        		},
                                 "ports": [
                                     {
                                         "name": "jolokia",

@@ -2,3 +2,7 @@ MAVEN_ARGS=-e -Popenshift -Dcom.redhat.xpaas.repo.redhatga clean package -Djava.
 #MAVEN_ARGS=-X -e -s maven/settings.xml -Popenshift -DskipTests -Dcom.redhat.xpaas.repo.redhatga package -Djava.net.preferIPv4Stack=true
 MAVEN_ARGS_APPEND=-s maven/settings.xml
 #MAVEN_MIRROR_URL=http://nexus.cloudapps.ocpcloud.com/content/groups/public
+#HAWKULAR_APM_URI=http://localhost:8080
+#HAWKULAR_APM_USERNAME=jdoe
+#HAWKULAR_APM_PASSWORD=password
+#JAVA_OPTS_APPEND=-Djboss.modules.system.pkgs=org.jboss.byteman,org.hawkular.apm.instrumenter,org.hawkular.apm.client.collector

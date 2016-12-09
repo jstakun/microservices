@@ -90,7 +90,13 @@
             "from": "[a-zA-Z0-9]{8}",
             "generate": "expression",
             "required": true
-        }
+        },
+        {
+            "description": "Maven repository location required by build config",
+            "name": "MAVEN_HOME",
+            "value": "http://192.168.122.1:8081/nexus/content/groups/public",
+            "required": true
+        },
     ],
     "objects": [
         {
@@ -174,7 +180,13 @@
                             "namespace": "${IMAGE_STREAM_NAMESPACE}",
                             "name": "jboss-eap70-openshift:latest"
                         }
-                    }
+                    },
+                    "env": [
+                       {
+                       		"name": "MAVEN_HOME",
+                       		"value": ${MAVEN_HOME}
+                       }
+        			]
                 },
                 "output": {
                     "to": {

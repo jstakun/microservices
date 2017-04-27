@@ -1,4 +1,5 @@
 #MAVEN_ARGS="-X -s maven/settings.xml -Popenshift -DskipTests -Dcom.redhat.xpaas.repo.redhatga package"
+MAVEN_ARGS_APPEND="-X -s maven/settings.xml"
 #HAWKULAR_APM_URI=http://localhost:8080
 #HAWKULAR_APM_USERNAME=jdoe
 #HAWKULAR_APM_PASSWORD=password

@@ -290,14 +290,7 @@
 			</dependencies>
 		</profile>
 
-		<profile>
-			<!-- When built in OpenShift the 'openshift' profile will be used when 
-				invoking mvn. -->
-			<!-- Use this profile for any OpenShift specific customization your app 
-				will need. -->
-			<!-- By default that is to put the resulting archive into the 'deployments' 
-				folder. -->
-			<!-- http://maven.apache.org/guides/mini/guide-building-for-different-environments.html -->
+		<!--profile>
 			<id>openshift</id>
 			<build>
 				<plugins>
@@ -311,23 +304,6 @@
 					</plugin>
 				</plugins>
 			</build>
-		</profile>
-
-		<!-- Activate JBoss Product Maven repository -->
-		<!-- profile>
-			<id>jboss-product-repository</id>
-			<activation>
-				<property>
-					<name>!jboss-product-repository</name>
-				</property>
-			</activation>
-			<repositories>
-				<repository>
-					<id>jboss-products-ga-repo</id>
-					<url>http://maven.repository.redhat.com/techpreview/all/</url>
-				</repository>
-			</repositories>
 		</profile-->
-
 	</profiles>
 </project>
